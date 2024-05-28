@@ -2,6 +2,8 @@
 
 ## What is Docker?
 
+![What is docker](what-is-docker.jpg)
+
 ## Important Linux Information for Docker
 
 ### Linux Distributions
