@@ -4,6 +4,10 @@
 
 ![What is docker](what-is-docker.jpg)
 
+## Docker Containers vs Virtual Machines
+
+![Docker containers versus virtual machines](docker-vs-vm.jpg)
+
 ## Important Linux Information for Docker
 
 ### Linux Distributions
