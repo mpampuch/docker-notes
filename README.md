@@ -152,7 +152,7 @@ The `FROM` instruction in Dockerfile specifies the base image from which you wan
 > 
 > `FROM node:latest`
 >
-> **You should never do this**. Upon successsive builds of your docker image the environment might change. Instead, use a specific version for your base image. Example:
+> **You should never do this!** Upon successsive builds of your docker image the environment might change. Instead, use a specific version for your base image. Example:
 > 
 > `FROM node:14.16.0-alpine3.13`
 
