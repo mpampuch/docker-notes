@@ -179,6 +179,11 @@ The `COPY` instruction in a Dockerfile copies files or directories from the Dock
 - You can specify multiple source files or directories, and they will all be copied into the destination directory.
     - When using `COPY` with more than one source file, the destination must be a directory and end with a `/` (or `\`). Example: `/app` must be `/app/`.
 
+> ![NOTE]
+> A common pattern is 
+> `WORDIR /app`
+> `COPY . .`
+
 #### Relative Paths:
 
 - Paths specified in the `COPY` instruction are relative to the build context, which is typically the directory containing the Dockerfile.
