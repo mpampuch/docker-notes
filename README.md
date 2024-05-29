@@ -83,10 +83,10 @@ You can enter Docker containers interactively to inspect the virtual environment
 1. First, start a container from the Docker image you want to enter. You can do this using the docker run command. For example:
 
 ```bash
-docker run -it <image_name> /bin/bash
+docker run -it <image_name_or_id> /bin/bash
 ```
 
-Replace `<image_name>` with the name or ID of the Docker image you want to run. The `-it` flag is used to start the container in interactive mode and allocate a pseudo-TTY for the session. `/bin/bash` specifies the command to run inside the container, which in this case is the Bash shell. You can replace `/bin/bash` with the command appropriate for the shell available in the image (e.g., `/bin/sh`).
+Replace `<image_name_or_id>` with the name or ID of the Docker image you want to run. The `-it` flag is used to start the container in interactive mode and allocate a pseudo-TTY for the session. `/bin/bash` specifies the command to run inside the container, which in this case is the Bash shell. You can replace `/bin/bash` with the command appropriate for the shell available in the image (e.g., `/bin/sh`).
 
 2. If the container is already running, you can use the `docker exec` command to enter it interactively. For example:
 
@@ -124,7 +124,41 @@ So, when you see a prompt like `root@container_id:/app#`, it means that you are 
 
 When you're finished, you can exit the interactive session by typing `exit` and pressing Enter.
 
+## Dockerfiles
 
+```docker
+FROM         # to specify the base image 
+WORKDIR      # to set the working directory
+COPY         # to copy files/directories
+ADD          # to copy files/directories
+RUN          # to run commands 
+ENV          # to set environment variables
+EXPOSE       # to document the port the container is listening on
+USER         # to set the user running the app
+CMD          # to set the default command/program
+ENTRYPOINT   # to set the default command/program
+```
+
+## Choosing a Suitable Base Image
+
+## Excluding Files and Directories with `.dockerignore`
+
+## Optimizing Builds
+
+## Removing Docker Images
+
+```docker
+docker container rm <containerID> 
+docker rm <containerID> 
+docker rm -f <containerID>        # to force the removal
+docker container prune            # to remove stopped containers
+```
+
+## Tagging Docker Images
+
+## Sharing Docker Images
+
+## Saving and Loading Images
 
 ## Important Linux Information for Docker
 
@@ -167,8 +201,6 @@ apt install nano
 apt remove nano
 ```
 
-
-
 ### Managing Environment Variables
 
 ```bash
@@ -192,6 +224,30 @@ groupmod           # to modify a group
 groupdel           # to delete a group
 ```
 
+In Linux, each user account can belong to one primary group and zero or more secondary groups/ Here's a breakdown of primary and secondary groups:
+
+#### Primary Group:
+
+- Every user account in Linux is associated with a primary group.
+- When a user creates a file or directory, the primary group of the user is typically assigned as the group owner of that file or directory by default.
+- The primary group is specified in the user's entry in the `/etc/passwd` file.
+- The primary group is identified by its Group ID (GID), which is a numeric value associated with the group.
+
+#### Secondary Groups:
+
+- In addition to the primary group, a user can be a member of multiple secondary groups.
+- Secondary groups allow users to access files and resources that belong to those groups.
+- Secondary groups are specified in the user's entry in the `/etc/group` file.
+- Users can switch to one of their secondary groups temporarily using the newgrp command.
+- Secondary groups are identified by their Group IDs (GIDs), which are numeric values associated with the groups.
+
+Here's a summary of the files where primary and secondary group information is stored:
+
+- `/etc/passwd`: This file contains user account information, including the primary group of each user.
+- `/etc/group`: This file contains group information, including the names and members of each group, including both primary and secondary groups.
+
+![Linux Groups](linux-groups.png)
+
 ### Managing File Permissions
 
 ```bash
@@ -201,39 +257,3 @@ chmod o+x deploy.sh    # give everyone else execute permission
 chmod ug+x deploy.sh   # to give the owning user and group execute permission
 chmod ug-x deploy.sh   # to remove the execute permission from the owning user and group
 ```
-
-## Dockerfiles
-
-```docker
-FROM         # to specify the base image 
-WORKDIR      # to set the working directory
-COPY         # to copy files/directories
-ADD          # to copy files/directories
-RUN          # to run commands 
-ENV          # to set environment variables
-EXPOSE       # to document the port the container is listening on
-USER         # to set the user running the app
-CMD          # to set the default command/program
-ENTRYPOINT   # to set the default command/program
-```
-
-## Choosing a Suitable Base Image
-
-## Excluding Files and Directories with `.dockerignore`
-
-## Optimizing Builds
-
-## Removing Docker Images
-
-```docker
-docker container rm <containerID> 
-docker rm <containerID> 
-docker rm -f <containerID>        # to force the removal
-docker container prune            # to remove stopped containers
-```
-
-## Tagging Docker Images
-
-## Sharing Docker Images
-
-## Saving and Loading Images
