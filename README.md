@@ -117,7 +117,7 @@ Prompt Symbol:
 
 So, when you see a prompt like `root@container_id:/app#`, it means that you are logged in as the root user inside a Docker container, currently working in the /app directory, and have superuser privileges, allowing you to execute commands with elevated permissions.
 
-> [!NOTE]
+> [!WARNING]
 > It is typically dangerous to give users root privileges inside a container (despite this being the default Docker behaviour). If you are building an app, it is advised fix the user and group permissions in the Dockerfile.
 
 ### Exiting Interactive Docker Containers
