@@ -294,6 +294,8 @@ node_modules/
 
 ## Optimizing Builds
 
+![Dockerfile structure](structuring-docker-file.png)
+
 ## Removing Docker Images
 
 ```docker
