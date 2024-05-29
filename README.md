@@ -78,10 +78,51 @@ docker stop <containerID>
 ## Entering a Docker Container Interactively
 
 
+You can enter Docker containers interactively to inspect the virtual environment. Here is how it is done:
+
+1. First, start a container from the Docker image you want to enter. You can do this using the docker run command. For example:
 
 ```bash
 docker run -it <image_name> /bin/bash
 ```
+
+Replace `<image_name>` with the name or ID of the Docker image you want to run. The `-it` flag is used to start the container in interactive mode and allocate a pseudo-TTY for the session. `/bin/bash` specifies the command to run inside the container, which in this case is the Bash shell. You can replace `/bin/bash` with the command appropriate for the shell available in the image (e.g., `/bin/sh`).
+
+2. If the container is already running, you can use the `docker exec` command to enter it interactively. For example:
+
+```bash
+docker exec -it <container_name_or_id> /bin/bash
+```
+
+Replace `<container_name_or_id>` with the name or ID of the running container you want to enter. Again, `/bin/bash` specifies the command to run inside the container.
+
+After running either of these commands, you should be dropped into an interactive shell session within the Docker container, allowing you to execute commands and interact with the container's filesystem and environment. 
+
+### The Interactive Docker Container Prompt
+
+The interactive Docker container prompt typically appears as something like `root@container_id:/app#` when you enter an interactive session within a Docker container. Here's a breakdown of its components:
+
+#### User and Hostname:
+
+- `root`: This indicates the username of the current user inside the container. In this case, it's "root," which is the superuser or administrator account in Unix-like operating systems.
+- `@`: This symbol separates the username from the hostname.
+- `container_id`: This is the unique identifier of the Docker container. It could also be the container's name if you provided one when creating the container.
+
+#### Current Directory:
+
+- `/app`: This represents the current working directory inside the container. In this example, the prompt indicates that you are currently in the /app directory.
+Prompt Symbol:
+
+- `#`: This symbol indicates that the user is operating with root privileges. In Unix-like systems, the dollar sign `$` typically indicates a _regular user_, while the pound sign `#` indicates the _root user_ or _superuser_.
+
+So, when you see a prompt like `root@container_id:/app#`, it means that you are logged in as the root user inside a Docker container, currently working in the /app directory, and have superuser privileges, allowing you to execute commands with elevated permissions.
+
+> [!NOTE]
+> It is typically dangerous to give users root privileges inside a container (despite this being the default Docker behaviour). If you are building an app, it is advised fix the user and group permissions in the Dockerfile.
+
+### Exiting Interactive Docker Containers
+
+When you're finished, you can exit the interactive session by typing `exit` and pressing Enter.
 
 
 
