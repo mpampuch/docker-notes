@@ -180,8 +180,11 @@ The `COPY` instruction in a Dockerfile copies files or directories from the Dock
     - When using `COPY` with more than one source file, the destination must be a directory and end with a `/` (or `\`). Example: `/app` must be `/app/`.
 
 > ![NOTE]
+> 
 > A common pattern is 
+> 
 > `WORDIR /app`
+> 
 > `COPY . .`
 
 #### Relative Paths:
