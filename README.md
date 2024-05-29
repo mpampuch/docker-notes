@@ -183,10 +183,11 @@ The `COPY` instruction in a Dockerfile copies files or directories from the Dock
 > 
 > A common pattern is 
 > 
-> `WORDIR /app`
-> 
-> `COPY . .`
-> 
+> ```docker
+> WORDIR /app
+> COPY . .
+> ```
+>
 > This copies all files and directories from the Docker host's current directory (the directory containing the Dockerfile) into the `/app` directory within the Docker container. The first `.` represents the source directory on the Docker host, and the second `.` represents the destination directory within the Docker container.
 
 
