@@ -257,7 +257,7 @@ Example:
 RUN ["apt-get", "update", "&&", "apt-get", "install", "-y", "package1", "package2"]
 ```
 
-> [!TIP]
+> [!NOTE]
 > Exec form is preferred for clarity and avoids issues with shell parsing.
 
 ### `ENV`
