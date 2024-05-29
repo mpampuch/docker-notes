@@ -1,8 +1,16 @@
 # docker-notes
 
+Some tips / things of notes for myself while I'm learning Docker
+
 ## What is Docker?
 
-![What is docker](what-is-docker.jpg)
+Docker is a platform and tool designed to make it easier to create, deploy, and run applications using containers. Containers allow developers to package an application with all of its dependencies — such as libraries, frameworks, and other components — into a standardized unit for development, shipment, and deployment. 
+
+![What is docker](what-is-docker.webp)
+
+It promotes consistency, portability, and scalability across different environments, from development laptops to production servers and cloud platforms. As a result, Docker has become an essential tool in modern software development workflows, enabling faster development cycles, improved collaboration, and more efficient resource utilization.
+
+![Docker example](docker-example.jpg)
 
 ## Docker Containers vs Virtual Machines
 
