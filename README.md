@@ -231,15 +231,34 @@ Each `RUN` command creates a new layer in the Docker image. This means that chan
 Since each `RUN` command creates a new layer, it's essential to clean up any temporary files or dependencies that are no longer needed after each command to avoid bloating the image size unnecessarily. This can be done using additional `RUN` commands to remove files or using the `&&` operator to chain cleanup commands with the main command.
 
 > [!NOTE]
-It's good practice to combine multiple commands into a single `RUN` instruction when possible, using shell chaining (`&&`) to execute them sequentially. This helps minimize the number of layers created in the image, reducing its size.
+> It's good practice to combine multiple commands into a single `RUN` instruction when possible, using shell chaining (`&&`) to execute them sequentially. This helps minimize the number of layers created in the image, reducing its size.
 
-#### Shell form vs Exec Form
+`RUN` supports both shell form and exec form. 
 
-`RUN` supports both shell form and exec form. In shell form, commands are executed using the default shell specified in the Dockerfile (`/bin/sh -c` on Linux-based images). In exec form, commands are executed directly without a shell. Exec form is preferred for clarity and avoids issues with shell parsing.
+#### Shell form 
 
+In shell form, commands are executed using the default shell specified in the Dockerfile (`/bin/sh -c` on Linux-based images). 
 
+Example:    
 
+```docker
+RUN apt-get update && apt-get install -y \
+    package1 \
+    package2
+```
 
+#### Exec form 
+
+In exec form, commands are executed directly without a shell.
+
+Example:    
+
+```docker
+RUN ["apt-get", "update", "&&", "apt-get", "install", "-y", "package1", "package2"]
+```
+
+> [!NOTE]
+> Exec form is preferred for clarity and avoids issues with shell parsing.
 
 ### `ENV`
 
@@ -264,6 +283,14 @@ It's good practice to combine multiple commands into a single `RUN` instruction 
 If you specify 
 
 ## Excluding Files and Directories with `.dockerignore`
+
+A `.dockerignore` file is used to specify files and directories that should be excluded when building a Docker image. It works similarly to `.gitignore` files in Git, allowing you to define patterns to exclude specific files or directories from being included in the Docker image during the build process.
+
+Example, inside a `.dockerignore` file you can have 
+
+```
+node_modules/
+```
 
 ## Optimizing Builds
 
