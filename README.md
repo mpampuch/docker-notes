@@ -139,7 +139,110 @@ CMD          # to set the default command/program
 ENTRYPOINT   # to set the default command/program
 ```
 
+### `FROM`
+
+The `FROM` instruction in Dockerfile specifies the base image from which you want to build your Docker image. It is typically the first instruction in a Dockerfile and defines the starting point for the build process.
+
+> [!CAUTION]
+> If not specified, by default `FROM` pulls the latest image. For example:
+> 
+> `FROM node`
+>
+> is equivalent to
+> 
+> `FROM node:latest`
+>
+> **You should never do this**. Upon successsive builds of your docker image the environment might change. Instead, use a specific version for your base image. Example:
+> 
+> `FROM node:14.16.0-alpine3.13`
+
+### `WORKDIR`
+
+The `WORKDIR` instruction in a Dockerfile sets the working directory for any subsequent `RUN`, `CMD`, `ENTRYPOINT`, `COPY`, and `ADD` instructions. It allows you to specify the directory where commands will be executed within the Docker container.
+
+- If the directory specified in `WORKDIR` does not exist, Docker will create it for you.
+- If multiple `WORKDIR` instructions are specified in a Dockerfile, only the last one will take effect.
+- Paths specified in `WORKDIR` are relative to the previous `WORKDIR` or to the Dockerfile's directory if no previous `WORKDIR` is specified.
+- You can use both absolute and relative paths in the `WORKDIR` instruction.
+
+### `COPY`
+
+The `COPY` instruction in a Dockerfile copies files or directories from the Docker host's filesystem into the filesystem of the Docker image being built. It allows you to add files from your local machine or from a directory on the Docker host into the Docker image during the build process.
+
+- If the source is a file, the destination must be a directory. If the source is a directory, the destination can be a directory or a file.
+- You can specify multiple source files or directories, and they will all be copied into the destination directory.
+
+#### Relative Paths:
+
+- Paths specified in the `COPY` instruction are relative to the build context, which is typically the directory containing the Dockerfile.
+- The build context is sent to the Docker daemon when you run the docker build command, and the paths specified in the `COPY` instruction are resolved relative to this build context.
+
+#### Permissions:
+
+- When files are copied into the Docker image, they are copied with the same permissions and ownership as on the Docker host. This means that the user and group ownership of the files will be preserved.
+- You can use the `--chown` option with `COPY` to change the ownership of the copied files in the Docker image.
+
+### `ADD`
+
+The `ADD` instruction in a Dockerfile copies files, directories, or remote URLs from the Docker host's filesystem or from a URL into the filesystem of the Docker image being built. It's similar to the `COPY` instruction but with additional capabilities.
+
+#### Automatic Extraction:
+
+- If the source is a compressed archive (such as a `.tar`, `.tar.gz`, `.tgz`, `.tar.bz2`, `.tbz2`, .`tar.xz`, `.txz`, `.zip`, `.gz`, `.bz2`, `.xz`, or `.Z` file), `ADD` will automatically extract it into the destination directory in the Docker image.
+- This automatic extraction feature makes `ADD` convenient for adding compressed files or archives into a Docker image and automatically extracting them during the build process.
+
+#### Remote URLs:
+
+- If the source is a remote URL, `ADD` will download the content from the URL and copy it into the Docker image.
+- This feature allows you to directly add files from the internet into your Docker image during the build process.
+
+#### Permissions:
+
+- Similar to the `COPY` instruction, when files are copied or downloaded into the Docker image using `ADD`, they are copied with the same permissions and ownership as on the Docker host.
+- You can use the `--chown` option with `ADD` to change the ownership of the copied files in the Docker image.
+
+### `RUN`
+
+The `RUN` instruction in a Dockerfile executes commands within the Docker image during the build process. You can use it to execute any command that you would normally run in a terminal within the Docker image. It's a fundamental command that allows you to install packages, update software, create directories, or perform any other actions necessary to configure the environment inside the Docker container.
+
+#### Layer creation
+
+Each `RUN` command creates a new layer in the Docker image. This means that changes made by one `RUN` command are committed to the image and become available to subsequent `RUN` commands. This layering mechanism ensures that Docker can efficiently cache and reuse intermediate images during the build process.
+
+Since each `RUN` command creates a new layer, it's essential to clean up any temporary files or dependencies that are no longer needed after each command to avoid bloating the image size unnecessarily. This can be done using additional `RUN` commands to remove files or using the `&&` operator to chain cleanup commands with the main command.
+
+> [!NOTE]
+It's good practice to combine multiple commands into a single `RUN` instruction when possible, using shell chaining (`&&`) to execute them sequentially. This helps minimize the number of layers created in the image, reducing its size.
+
+#### Shell form vs Exec Form
+
+`RUN` supports both shell form and exec form. In shell form, commands are executed using the default shell specified in the Dockerfile (`/bin/sh -c` on Linux-based images). In exec form, commands are executed directly without a shell. Exec form is preferred for clarity and avoids issues with shell parsing.
+
+
+
+
+
+### `ENV`
+
+
+### `EXPOSE`
+
+
+### `USER`
+
+
+### `CMD`
+
+
+### `ENTRYPOINT`
+
+
+
+
+
 ## Choosing a Suitable Base Image
+
+If you specify 
 
 ## Excluding Files and Directories with `.dockerignore`
 
