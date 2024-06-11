@@ -376,7 +376,12 @@ In this example, the `USER` instruction sets the user context to `appuser`, and 
 
 ## Choosing a Suitable Base Image
 
-If you specify 
+The first place you should look for base images from your projects is Dockerhub, found on [hub.docker.com](hub.docker.com).
+
+1. Search for your desired base image. For example, if you are building an app with node.js, type in `node` into the search bar on Dockerhub.
+    - Often repositories like the node repository will have hundreds images. The following instructions guide you on which one to pick.
+2. Click on _tags_.
+3. 
 
 ## Excluding Files and Directories with `.dockerignore`
 
