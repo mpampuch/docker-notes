@@ -314,6 +314,48 @@ In this example, three environment variables (`APP_PORT`, `DB_HOST`, and `DB_POR
 
 ### `USER`
 
+The `USER` instruction in a Dockerfile sets the user or UID (User Identifier) that the subsequent instructions in the Dockerfile will run as. It allows you to specify the user context under which the commands in the image will be executed. This can be particularly useful for enhancing security and minimizing potential risks associated with running processes as the root user.
+
+The `USER` instruction can accept either a username or a UID and an optional group name or GID (Group Identifier). If only a username is provided, Docker will resolve it to a UID and GID.
+
+Example:
+
+```docker
+USER appuser
+
+# or
+
+USER 1000:1000
+```
+
+> [!NOTE]
+> It's good practice to name the apps user `app` or `appuser`.
+
+#### Benefits
+
+1. **Security:** Running containers as non-root users can help mitigate security risks by reducing the impact of potential vulnerabilities in the running processes. It limits the access that a compromised process would have to the host system.
+
+2. **Least Privilege:** By specifying a dedicated user for running container processes, you can adhere to the principle of least privilege, ensuring that containers only have access to resources and permissions necessary for their operation.
+
+3. **Isolation:** Using a separate user for running container processes helps isolate the container's environment from the host system, enhancing containment and minimizing potential conflicts or unintended modifications to host resources.
+
+#### Best Practices
+
+1. **Avoid Running as Root:** Whenever possible, avoid running container processes as the root user. Instead, create and use non-privileged users with limited permissions.
+
+2. **Use Minimal Privileges:** Grant only the necessary permissions to the user specified with USER to minimize the potential impact of security breaches.
+
+3. **Set Appropriate Ownership:** Ensure that files and directories within the container are owned by the appropriate user to prevent permission issues during runtime.
+
+Example
+
+```docker
+USER appuser
+
+RUN mkdir /app && chown appuser:appuser /app
+```
+
+In this example, the `USER` instruction sets the user context to `appuser`, and subsequent commands, such as creating a directory and changing its ownership, will be executed under this user's permissions.
 
 ### `CMD`
 
