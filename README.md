@@ -385,6 +385,11 @@ The first place you should look for base images from your projects is Dockerhub,
 4. Now skim through the results. Make sure the image tags are descriptive. For example:
     - `14-buster` is an image that contains node version 14 built on the linux distribution buster. However, this image tag doesn't contain the minor build number, it's just the major version number. Additionally, the size of this image is ~333Mb. This is the compressed size, which is likely 3x smaller than the actual size. so this image is likely one you should **avoid**.
     - `14.16.0-alpine3.13` is an image that contains node 14 built on the linux distribution alpine. This image is very descriptive and contains major build and minor build and patch number and also the major and minor build for the distribution so that looks good. In additon, often we want to use images that are built on top of the alpine distribution because these are smaller and more lightweight and so the size of these images are smaller leading to faster builds. This image is ~40Mb compressed. This is an example of an image that you should probably **use**.
+5. So in your Dockerfile, on the first line type:
+
+```docker
+FROM node:14.16.0-alpine3.13
+```
 
 > [!NOTE]
 > Make sure you also pull the image that is built for your operating system and CPU architecture. 
