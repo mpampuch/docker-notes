@@ -270,6 +270,34 @@ RUN ["apt-get", "update", "&&", "apt-get", "install", "-y", "package1", "package
 
 ### `ENV`
 
+The `ENV` instruction in a Dockerfile sets environment variables within the Docker image. It allows you to define key-value pairs that can be referenced by subsequent commands or used by applications running inside the container. `ENV` is particularly useful for configuring software with environment-specific settings or for providing runtime parameters to applications.
+
+The `ENV` instruction follows a simple syntax of `ENV <key> <value>`. Multiple variables can be set in a single `ENV` instruction by separating them with spaces or by using multiple `ENV` instructions.
+
+Example:
+
+```docker
+ENV DATABASE_HOST=db.example.com \
+    DATABASE_PORT=5432
+```
+
+#### Benefits
+
+1. **Configuration Management:** ENV facilitates managing configuration settings separately from the application code, making it easier to maintain and update environment-specific variables.
+
+2. **Portability:** By using environment variables, Docker images become more portable across different environments without needing to modify the underlying application code.
+
+3. **Consistency:** Standardizing environment variables with ENV ensures consistency across deployments, reducing the chances of configuration errors.
+
+4. **Security:** Sensitive information, such as passwords or API keys, can be securely passed as environment variables rather than being hard-coded into the Dockerfile.
+
+#### Best Practices
+
+1. **Use Descriptive Names:** Choose clear and descriptive names for environment variables to enhance readability and maintainability.
+
+2. **Immutable Variables:** Treat environment variables as immutable; avoid modifying them within the Dockerfile or container runtime to maintain predictability.
+
+3. **Clear Documentation:** Document the purpose and usage of each environment variable either within the Dockerfile itself or in accompanying documentation.
 
 ### `EXPOSE`
 
