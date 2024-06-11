@@ -170,6 +170,14 @@ The `FROM` instruction in Dockerfile specifies the base image from which you wan
 > 
 > `FROM node:14.16.0-alpine3.13`
 
+By default, the image registry that docker uses is Dockerhub. However, you can pull images from any registry, you just need their full url. For example, to pull an image from Microsoft Container Registry, you can use:
+
+```docker
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1
+```
+
+However, you should never just copy a URL of an image from a website and use it in your Dockerfile. This is because the URL can change or the version can change so always do your research and make sure the image URL you put in your Dockerfile is the correct one.
+
 ### `WORKDIR`
 
 The `WORKDIR` instruction in a Dockerfile sets the working directory for any subsequent `RUN`, `CMD`, `ENTRYPOINT`, `COPY`, and `ADD` instructions. It allows you to specify the directory where commands will be executed within the Docker container.
