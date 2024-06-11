@@ -283,11 +283,11 @@ ENV DATABASE_HOST=db.example.com \
 
 #### Benefits
 
-1. **Configuration Management:** ENV facilitates managing configuration settings separately from the application code, making it easier to maintain and update environment-specific variables.
+1. **Configuration Management:** `ENV` facilitates managing configuration settings separately from the application code, making it easier to maintain and update environment-specific variables.
 
 2. **Portability:** By using environment variables, Docker images become more portable across different environments without needing to modify the underlying application code.
 
-3. **Consistency:** Standardizing environment variables with ENV ensures consistency across deployments, reducing the chances of configuration errors.
+3. **Consistency:** Standardizing environment variables with `ENV` ensures consistency across deployments, reducing the chances of configuration errors.
 
 4. **Security:** Sensitive information, such as passwords or API keys, can be securely passed as environment variables rather than being hard-coded into the Dockerfile.
 
@@ -298,6 +298,16 @@ ENV DATABASE_HOST=db.example.com \
 2. **Immutable Variables:** Treat environment variables as immutable; avoid modifying them within the Dockerfile or container runtime to maintain predictability.
 
 3. **Clear Documentation:** Document the purpose and usage of each environment variable either within the Dockerfile itself or in accompanying documentation.
+
+Example:
+
+```docker
+ENV APP_PORT=8080 \
+    DB_HOST=localhost \
+    DB_PORT=5432
+```
+
+In this example, three environment variables (`APP_PORT`, `DB_HOST`, and `DB_PORT`) are defined with default values. These variables can then be referenced within the Dockerfile or accessed by the application running inside the container.
 
 ### `EXPOSE`
 
