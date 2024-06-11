@@ -4,6 +4,8 @@ Some tips / things of notes for myself while I'm learning Docker
 
 ## What is Docker?
 
+![Docker logo](docker.png)
+
 Docker is a platform and tool designed to make it easier to create, deploy, and run applications using containers. Containers allow developers to package an application with all of its dependencies — such as libraries, frameworks, and other components — into a standardized unit for development, shipment, and deployment. 
 
 ![What is docker](what-is-docker.webp)
