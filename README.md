@@ -380,7 +380,7 @@ The first place you should look for base images from your projects is Dockerhub,
 
 1. Search for your desired base image. For example, if you are building an app with node.js, type in `node` into the search bar on Dockerhub.
     - Often repositories like the node repository will have hundreds images. The following instructions guide you on which one to pick.
-2. Click on _tags_.
+2. Click on **_tags_**.
 3. 
 
 ## Excluding Files and Directories with `.dockerignore`
