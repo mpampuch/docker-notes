@@ -423,10 +423,6 @@ However, in this case, you would need to ensure that the user with that `UID` an
 
 3. **Set Appropriate Ownership:** Ensure that files and directories within the container are owned by the appropriate user to prevent permission issues during runtime.
 
-Example
-
-
-
 ### `CMD`
 
 
