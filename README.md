@@ -275,8 +275,37 @@ Example:
 RUN ["apt-get", "update", "&&", "apt-get", "install", "-y", "package1", "package2"]
 ```
 
-> [!NOTE]
-> Exec form is preferred for clarity and avoids issues with shell parsing.
+#### Which is better? Shell form or Exec form?
+
+Usually, exec form is preferred for clarity and avoids issues with shell parsing.
+
+The exec form is parsed as a JSON array, which means that you must use double-quotes (`“`) around words not single-quotes (`‘`).
+
+Unlike the shell form, the exec form does not invoke a command shell. This means that normal shell processing does not happen. For example, `CMD [ "echo", "$HOME" ]` will not do variable substitution on `$HOME`. If you want shell processing then either use the shell form or execute a shell directly, for example: `CMD [ "sh", "-c", "echo $HOME" ]`. When using the exec form and executing a shell directly, as in the case for the shell form, it is the shell that is doing the environment variable expansion, not Docker.
+
+However, **you cannot chain together commands in the exec form**.
+
+`&&` is a function of the shell, which is used to chain commands together. In fact, when you use this syntax in a Dockerfile, you are actually leveraging the shell functionality.
+
+If you want to have multiple commands with the exec form, then you have do use the exec form to invoke the shell as follows
+
+```Dockerfile
+RUN ["sh", "-c", "addgroup app && adduser -S -G app app"]
+```
+
+In this case, it is actually **disadvantagous** to use the exec form because: 
+1. You have to explicitely specify the shell
+2. You have to take care of possibly escaping quotes
+3. You cannot split it into multiple lines for easier readability
+
+In this case, just using the shell form would be much better:
+
+```Dockerfile
+RUN addgroup app && \
+    adduser -S -G app app
+```
+
+
 
 ### `ENV`
 
