@@ -365,6 +365,24 @@ However, if you run this application inside a Docker container, port `:3000` wil
 
 So on the same machine you can have multiple containers running the same image. All these containers will be listening to port `:3000`. **However, the port `:3000` on the host is not going to be automatically mapped to these containers.**
 
+For example, you might run a React app inside a Docker container and see this...
+
+```
+Starting the development server...
+
+Compiled successfully!
+
+You can now view operator-admin in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://YOUR-LOCAL-IP-ADDRESS:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+```
+
+...And then try to access the app through `http://localhost:3000`. You will not be able to access the app through this address because the app is started on port `:3000` of the **container**, **not the localhost**.
+
 To do this, you can tell your container which port your app will be listening on:
 
 ```Dockerfile
