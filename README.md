@@ -422,6 +422,52 @@ However, in this case, you would need to ensure that the user with that `UID` an
 
 3. **Set Appropriate Ownership:** Ensure that files and directories within the container are owned by the appropriate user to prevent permission issues during runtime.
 
+4. **Define the app user early in the Dockerfile:** If you run a lot of commands before setting the user, you are running them as root. This may lead to permission issues down the lines especially when starting your app or using an entrypoint.
+
+For example:
+
+```Dockerfile
+FROM node:14.16.0-alpine3.13
+WORKDIR /app
+COPY . .
+RUN npm install
+ENV API_URL=http://api.myapp.com/
+EXPOSE 3000
+RUN addgroup app && adduser -S -G app app
+USER app
+```
+
+When trying to run your app:
+
+```bash
+docker run react-app npm start
+```
+
+You might encounter something like:
+
+```
+Starting the development server...
+
+Failed to compile.
+
+EACCES: permission denied, mkdir 'app/node_modules/.cache'
+```
+
+This is a permissions error because the app user was set at the end and all the previous instructions were set as the root user. 
+
+To fix this, reorder the Dockerfile:
+
+```Dockerfile
+FROM node:14.16.0-alpine3.13
+RUN addgroup app && adduser -S -G app app
+USER app
+WORKDIR /app
+COPY . .
+RUN npm install
+ENV API_URL=http://api.myapp.com/
+EXPOSE 3000
+```
+
 ### `CMD`
 
 
