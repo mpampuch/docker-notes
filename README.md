@@ -272,7 +272,8 @@ In exec form, commands are executed directly without a shell.
 Example:    
 
 ```Dockerfile
-RUN ["apt-get", "update", "&&", "apt-get", "install", "-y", "package1", "package2"]
+RUN ["apt-get", "update"]
+RUN ["apt-get", "install", "-y", "package1", "package2"]
 ```
 
 > [!NOTE]
