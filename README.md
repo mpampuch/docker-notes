@@ -136,7 +136,7 @@ When you're finished, you can exit the interactive session by typing `exit` and 
 
 ## Dockerfiles
 
-```docker
+```Dockerfile
 FROM         # to specify the base image 
 WORKDIR      # to set the working directory
 COPY         # to copy files/directories
@@ -174,7 +174,7 @@ The `FROM` instruction in Dockerfile specifies the base image from which you wan
 
 By default, the image registry that docker uses is Dockerhub. However, you can pull images from any registry, you just need their full url. For example, to pull an image from Microsoft Container Registry, you can use:
 
-```docker
+```Dockerfile
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 ```
 
@@ -201,7 +201,7 @@ The `COPY` instruction in a Dockerfile copies files or directories from the Dock
 > 
 > A common pattern is 
 > 
-> ```docker
+> ```Dockerfile
 > WORDIR /app
 > COPY . .
 > ```
@@ -259,7 +259,7 @@ In shell form, commands are executed using the default shell specified in the Do
 
 Example:    
 
-```docker
+```Dockerfile
 RUN apt-get update && apt-get install -y \
     package1 \
     package2
@@ -271,7 +271,7 @@ In exec form, commands are executed directly without a shell.
 
 Example:    
 
-```docker
+```Dockerfile
 RUN ["apt-get", "update", "&&", "apt-get", "install", "-y", "package1", "package2"]
 ```
 
@@ -286,7 +286,7 @@ The `ENV` instruction follows a simple syntax of `ENV <key> <value>`. Multiple v
 
 Example:
 
-```docker
+```Dockerfile
 ENV DATABASE_HOST=db.example.com \
     DATABASE_PORT=5432
 ```
@@ -311,7 +311,7 @@ ENV DATABASE_HOST=db.example.com \
 
 Example:
 
-```docker
+```Dockerfile
 ENV APP_PORT=8080 \
     DB_HOST=localhost \
     DB_PORT=5432
@@ -330,7 +330,7 @@ The `USER` instruction can accept either a username or a UID and an optional gro
 
 Example:
 
-```docker
+```Dockerfile
 USER appuser
 
 # or
@@ -359,7 +359,7 @@ USER 1000:1000
 
 Example
 
-```docker
+```Dockerfile
 USER appuser
 
 RUN mkdir /app && chown appuser:appuser /app
@@ -389,7 +389,7 @@ The first place you should look for base images from your projects is Dockerhub,
     - `14.16.0-alpine3.13` is an image that contains node 14 built on the linux distribution alpine. This image is very descriptive and contains major build and minor build and patch number and also the major and minor build for the distribution so that looks good. In additon, often we want to use images that are built on top of the alpine distribution because these are smaller and more lightweight and so the size of these images are smaller leading to faster builds. This image is ~40Mb compressed. This is an example of an image that you should probably **use**.
 5. So in your Dockerfile, on the first line type:
 
-```docker
+```Dockerfile
 FROM node:14.16.0-alpine3.13
 ```
 
@@ -414,7 +414,7 @@ node_modules/
 
 ## Removing Docker Images
 
-```docker
+```Dockerfile
 docker container rm <containerID> 
 docker rm <containerID> 
 docker rm -f <containerID>        # to force the removal
