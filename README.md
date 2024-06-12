@@ -414,7 +414,7 @@ node_modules/
 
 ## Removing Docker Images
 
-```Dockerfile
+```bash
 docker container rm <containerID> 
 docker rm <containerID> 
 docker rm -f <containerID>        # to force the removal
