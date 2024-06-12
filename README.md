@@ -338,8 +338,8 @@ EXPOSE 3000
 > [!WARNING]
 > The `EXPOSE` does not automatically publish the port on the host. It is just a form of documentation to tell us this container will eventually listen on port 3000.
 
-
-You can map a port on the host to the port on these containers in the dockerfile?
+> [!TIP]
+> You can map a port on the host to the port on these containers in the dockerfile.
 
 
 ### `USER`
