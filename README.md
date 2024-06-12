@@ -381,7 +381,7 @@ Note that the development build is not optimized.
 To create a production build, use npm run build.
 ```
 
-...And then try to access the app through `http://localhost:3000`. You will not be able to access the app through this address because the app is started on port `:3000` of the **container**, **not the localhost**.
+...And then try to access the app through `http://localhost:3000`. You will not be able to access the app through this address because the app is started on port `:3000` of the **container**, **_not the localhost_**.
 
 To do this, you can tell your container which port your app will be listening on:
 
