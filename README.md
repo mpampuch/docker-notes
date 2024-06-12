@@ -512,6 +512,9 @@ groupmod           # to modify a group
 groupdel           # to delete a group
 ```
 
+> [!WARNING]
+> Some images or Linux distributions may have not have `useradd` or vice versa may not have `adduser`. Be aware of which options are available on your image.
+
 In Linux, each user account can belong to one primary group and zero or more secondary groups/ Here's a breakdown of primary and secondary groups:
 
 #### Primary Group:
@@ -535,6 +538,21 @@ Here's a summary of the files where primary and secondary group information is s
 - `/etc/group`: This file contains group information, including the names and members of each group, including both primary and secondary groups.
 
 ![Linux Groups](linux-groups.png)
+
+#### Best practice for adding users in Linux
+
+In Linux, when adding a new user, it is best practice to give that user a primary group with the same name as the user.
+
+- For `adduser`
+    - use `-S` to create a new system user
+    - use `-G` to assign that user to a primary group
+
+Example:
+
+```bash
+addgroup app # Create a group called app
+adduser -S -G app app # Create a system user called app that belongs to the primary group app
+```
 
 ### Managing File Permissions
 
