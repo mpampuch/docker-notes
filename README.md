@@ -321,6 +321,26 @@ In this example, three environment variables (`APP_PORT`, `DB_HOST`, and `DB_POR
 
 ### `EXPOSE`
 
+The `EXPOSE` instruction exposes a port for your app.
+
+When you launch an application outside of Docker, you will usually start a development server on something like `localhost:3000` where `localhost` refers to the loopback network interface of the local machine, which is typically assigned the IP address `127.0.0.1`. This address is used to access services running on the same machine that the request originated from. The `:3000` part is called the *port number*. Ports are used to differentiate between different services or processes running on the same machine. In this context, `:3000` indicates that the service or process listening on port 3000 is being accessed. When combined, `localhost:3000` refers to a service running on the local machine, specifically on port 3000.
+
+However, if you run this application inside a Docker container, port `:3000` will be open on the **_container_**, not on the host. 
+
+So on the same machine you can have multiple containers running the same image. All these containers will be listening to port `:3000`. **However, the port `:3000` on the host is not going to be automatically mapped to these containers.**
+
+To do this, you can tell your container which port your app will be listening on:
+
+```Dockerfile
+EXPOSE 3000
+```
+
+> [!WARNING]
+> The `EXPOSE` does not automatically publish the port on the host. It is just a form of documentation to tell us this container will eventually listen on port 3000.
+
+
+You can map a port on the host to the port on these containers in the dockerfile?
+
 
 ### `USER`
 
