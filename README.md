@@ -535,6 +535,8 @@ export name=bob    # to set a variable in the current session
 ### Managing Users and Groups
 
 ```bash
+whoami            # to print the current users name
+
 useradd -m john    # to create a user with a home directory
 adduser john       # to add a user interactively
 usermod            # to modify a user
