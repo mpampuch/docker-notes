@@ -488,6 +488,28 @@ EXPOSE 3000
 
 ### `CMD`
 
+The `CMD` instruction is for specifying the default command when starting the application.
+
+For example, if you try to start a react app with docker like this...
+
+```bash
+docker run react-app
+```
+
+...the container will start and then immediately stop. This is because you didn't specify a command or program to execute. You fix this by typing `npm start` at the end...
+
+```bash
+docker run react-app npm start
+```
+
+...However, since it's tedious to type `npm start` in the `docker run` command everytime, you can set this default command in the Dockerfile with the `CMD` instruction.
+
+```Dockerfile
+CMD ["npm", "run"]
+```
+
+As with `RUN`, `CMD` can use shell form or exec form as syntax.
+
 
 ### `ENTRYPOINT`
 
