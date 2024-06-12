@@ -544,7 +544,7 @@ Here's a summary of the files where primary and secondary group information is s
 In Linux, when adding a new user, it is best practice to give that user a primary group with the same name as the user.
 
 - For `adduser`
-    - use `-S` to create a new system user
+    - use `-S` to create a new system user. System users are good when you don't want to create real users but instead users to just run an application.
     - use `-G` to assign that user to a primary group
 
 Example:
