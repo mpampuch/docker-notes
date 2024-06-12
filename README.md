@@ -275,6 +275,9 @@ Example:
 RUN ["apt-get", "update", "&&", "apt-get", "install", "-y", "package1", "package2"]
 ```
 
+> [!NOTE]
+> Exec form is usually preferred (see below for cases where it isn't)
+
 #### Which is better? Shell form or Exec form?
 
 Usually, exec form is preferred for clarity and avoids issues with shell parsing.
