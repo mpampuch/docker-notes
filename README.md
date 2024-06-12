@@ -505,11 +505,27 @@ docker run react-app npm start
 ...However, since it's tedious to type `npm start` in the `docker run` command everytime, you can set this default command in the Dockerfile with the `CMD` instruction.
 
 ```Dockerfile
-CMD ["npm", "run"]
+CMD ["npm", "start"]
 ```
 
-As with `RUN`, `CMD` can use shell form or exec form as syntax.
+Now you can just run the app as you did originally:
 
+```bash
+docker run react-app
+```
+
+> [!NOTE]
+> As with `RUN`, `CMD` can use shell form or exec form as syntax.
+>
+> Also since the `CMD` instruction is for defining the default command, it doesn't make sense to have multiple command instructions:
+> 
+> ```Dockerfile
+> CMD npm start
+> CMD npm start
+> CMD npm start
+> ```
+> 
+> If you do this, only the last one will take effect.
 
 ### `ENTRYPOINT`
 
