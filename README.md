@@ -347,7 +347,7 @@ Dockerfile.
 
 ### `USER`
 
-The `USER` instruction in a Dockerfile sets the user or UID (User Identifier) that the subsequent instructions in the Dockerfile will run as. It allows you to specify the user context under which the commands in the image will be executed. This can be particularly useful for enhancing security and minimizing potential risks associated with running processes as the root user.
+The `USER` instruction in a Dockerfile sets the user or UID (User Identifier) that the subsequent instructions in the Dockerfile will run as. It allows you to specify the user context under which the commands in the image will be executed. This can be particularly useful for enhancing security and minimizing potential risks associated with running processes as the root user. Remember, by default, Docker runs the application as the root user which is behaviour you normally don't want.
 
 The `USER` instruction can accept either a username or a UID and an optional group name or GID (Group Identifier). If only a username is provided, Docker will resolve it to a UID and GID.
 
