@@ -260,7 +260,8 @@ In shell form, commands are executed using the default shell specified in the Do
 Example:    
 
 ```Dockerfile
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && \
+    apt-get install -y \
     package1 \
     package2
 ```
