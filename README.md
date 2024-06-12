@@ -552,6 +552,10 @@ Example:
 ```bash
 addgroup app # Create a group called app
 adduser -S -G app app # Create a system user called app that belongs to the primary group app
+
+# Or more simply
+
+addgroup app && adduser -S -G app app
 ```
 
 ### Managing File Permissions
