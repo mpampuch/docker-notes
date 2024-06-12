@@ -527,6 +527,12 @@ docker run react-app
 > 
 > If you do this, only the last one will take effect.
 
+#### What is the difference between the `RUN` and `CMD` instructions?
+
+Although these commands seem similar because they both execute shell commands, they are not the same because they are executed at different times.
+- `RUN` is a build-time instruction, meaning these commands are executed at the time of building the image.
+- `CMD` is a run-time instruction, meaning these commands are executed when starting a container.
+
 ### `ENTRYPOINT`
 
 
