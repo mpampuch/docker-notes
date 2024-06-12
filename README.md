@@ -535,9 +535,45 @@ Although these commands seem similar because they both execute shell commands, t
 
 ### `ENTRYPOINT`
 
+The `ENTRYPOINT` instruction is very similar to the `CMD` instruction. It also defines the default command to be run when running a container, but commands executed using the `ENTRYPOINT` instruction are harder to overwrite.
 
+For example:
 
+If you have a Dockerfile like this
 
+```Dockerfile
+CMD ["npm", "start"]
+```
+
+You can easily overwrite this default command when starting a container. For example:
+
+```
+docker run react-app echo hello
+```
+
+This will overwrite the `npm start` instruction with `echo hello`. 
+
+In contrast, if you're Dockerfile looked like this
+
+```Dockerfile
+ENTRYPOINT ["npm", "start"]
+```
+
+Then you need to write... 
+
+```
+docker run react-app --entrypoint echo hello
+```
+
+...to overwrite the `npm start` command. 
+
+Because many people forget to use the `--entrypoint` option, the `ENTRYPOINT` instruction is more less susceptible to overwriting.
+
+So in practical terms:
+- Use `CMD` when you want flexibility and to run ad-hoc commands with your container
+- Use `ENTRYPOINT` when you know for sure this is the command or program that should be executed everytime the container runs without exception
+
+Often times which to use comes down to personal preference because they can be both overwritten.
 
 ## Choosing a Suitable Base Image
 
