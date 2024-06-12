@@ -276,7 +276,9 @@ RUN ["apt-get", "update", "&&", "apt-get", "install", "-y", "package1", "package
 ```
 
 > [!NOTE]
-> Exec form is usually preferred (see below for cases where it isn't)
+> Exec form is usually preferred 
+> 
+> (However see below for cases where it isn't)
 
 #### Which is better? Shell form or Exec form?
 
