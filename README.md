@@ -607,7 +607,7 @@ Example, inside a `.dockerignore` file you can have
 node_modules/
 ```
 
-## Optimizing Builds
+## Docker Image Layers and Optimizing Builds
 
 To understand how to optimize builds, you have to understand layers in Docker. An image is essentially a collection of layers. You can think of a layer as a small file system that only contains modified files. So when docker tries to build an image for you, it executes each of the instructions (lines) in the Dockerfile and creates a new layer. That layer only includes the files that were modified as a result of that instruction.
 
