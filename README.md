@@ -673,6 +673,47 @@ RUN /bin/sh -c addgroup -S app && adduser -S…   4.84kB
 /bin/sh -c #(nop) ADD file:3b16ffee2b26d8af5…   5.35MB
 ```
 
+So an image in Docker is just a collection of these layers.
+
+Docker has an optimization feature. It's going to check if any of the instructions have changed. If the instruction hasn't changed, Docker is not going to re-build this layer, it is going to reuse it from it's cache. 
+
+There are some instructions where Docker cannot tell if anything has changed from the Dockerfile alone, for example: 
+
+```Dockerfile
+COPY . .
+```
+
+For these instructions, Docker will check the content of the files as well. That means that if you make a small something inside the project directory, Docker cannot reuse this layer from it's cache and instead has to rebuild it.
+
+However, once a layer is rebuilt, **all the following layers have to be re-built as well**, even if nothing has changed in these layers. This is where bottlenecks can occur. For example, in the Dockerfile example above, if you make a change in the project directory, then the layers corresponding to the following instructions need to be rebuilt
+
+```Dockerfile
+COPY . .
+RUN npm install
+ENV API_URL=http://api.myapp.com/
+EXPOSE 3000
+CMD ["npm", "start"]
+```
+
+The `RUN npm intall` instruction takes a long time and because it installs all the dependencies for the application. To circumvent this, you can re-organize your Dockerfile so that this command comes before the `COPY . .` command. That way if edits to the directory are made, the dependencies will not need to be reinstalled. Since the only files that you need to run `npm install` are `package.json` and `package.lock.json`, you can re-structure the Dockerfile to look like this.
+
+```Dockerfile
+FROM node:14.16.0-alpine3.13
+RUN addgroup add && adduser -S -G app app
+USER app
+WORKDIR /app
+COPY package*.json .
+RUN npm install
+COPY . .
+ENV API_URL=http://api.myapp.com/
+EXPOSE 3000
+CMD ["npm", "start"]
+```
+
+Now with this new set-up, if you haven't added any new dependencies to the project, Docker will re-use the `RUN npm install` layer from the cache, because `package.json` and `package.lock.json` are not modified.
+
+> [!NOTE]
+> If you used `RUN npm update` instead of `RUN npm install`, docker would re-use this layer.
 
 ![Dockerfile structure](structuring-docker-file.png)
 
