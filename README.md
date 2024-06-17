@@ -609,6 +609,71 @@ node_modules/
 
 ## Optimizing Builds
 
+To understand how to optimize builds, you have to understand layers in Docker. An image is essentially a collection of layers. You can think of a layer as a small file system that only contains modified files. So when docker tries to build an image for you, it executes each of the instructions (lines) in the Dockerfile and creates a new layer. That layer only includes the files that were modified as a result of that instruction.
+
+So for example, if you have a Dockerfile that looks like this:
+
+```Dockerfile
+FROM node:14.16.0-alpine3.13
+RUN addgroup add && adduser -S -G app app
+USER app
+WORKDIR /app
+COPY . .
+RUN npm install
+ENV API_URL=http://api.myapp.com/
+EXPOSE 3000
+CMD ["npm", "start"]
+```
+
+When Docker begins building an image, it will read this first instruction and put it in a layer:
+
+```Dockerfile
+FROM node:14.16.0-alpine3.13
+```
+
+> [!NOTE]
+> Technically, the node base image itself is several layers, but for understanding the concept of optimizing builds it can be thought of as one layer.
+
+Then Docker is going to execute the second instruction:
+
+```Dockerfile
+RUN addgroup add && adduser -S -G app app
+```
+
+This instruction will create a new layer because when you add a user or a group, something is written to the filesystem, in effect modifying some files. This layer will only include the modified files.
+
+Similarly, Docker will execute all the other instructions and create several layers.
+
+These layers can be viewed by typing
+
+```bash
+docker history <IMAGE-NAME>
+```
+
+This will produce a list that you can read _bottom to top_ showing you the layers, which instruction they were created by, and the size of each layer. The first group of layers will be the layers imported from the base image, but then the following instructions should each correspond to a single layer.
+
+```
+CREATED BY                                      SIZE
+CMD ["npm" "start"]                             0B
+EXPOSE map[3000/tcp:{}]                         0B
+ENV API_URL=http://api.myapp.com/               0B
+RUN /bin/sh -c npm install # buildkit           359MB
+COPY . . # buildkit                             799kB
+WORKDIR /app                                    0B
+USER app                                        0B
+RUN /bin/sh -c addgroup -S app && adduser -S…   4.84kB
+/bin/sh -c #(nop)  CMD ["node"]                 0B
+/bin/sh -c #(nop)  ENTRYPOINT ["docker-entry…   0B
+/bin/sh -c #(nop) COPY file:238737301d473041…   116B
+/bin/sh -c apk add --no-cache --virtual .bui…   7.91MB
+/bin/sh -c #(nop)  ENV YARN_VERSION=1.22.5      0B
+/bin/sh -c addgroup -g 1000 node     && addu…   102MB
+/bin/sh -c #(nop)  ENV NODE_VERSION=14.16.0     0B
+/bin/sh -c #(nop)  CMD ["/bin/sh"]              0B
+/bin/sh -c #(nop) ADD file:3b16ffee2b26d8af5…   5.35MB
+```
+
+
 ![Dockerfile structure](structuring-docker-file.png)
 
 ## Removing Docker Images
