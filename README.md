@@ -713,7 +713,7 @@ CMD ["npm", "start"]
 Now with this new set-up, if you haven't added any new dependencies to the project, Docker will re-use the `RUN npm install` layer from the cache, because `package.json` and `package.lock.json` are not modified.
 
 > [!NOTE]
-> If you used `RUN npm update` instead of `RUN npm install`, docker would re-use this layer.
+> If you used `RUN npm update` instead of `RUN npm install`, Docker would re-use this layer.
 
 So to summarize, to optimize your image builds, you should structure your Dockerfile as follows:
 
