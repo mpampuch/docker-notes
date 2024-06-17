@@ -715,6 +715,8 @@ Now with this new set-up, if you haven't added any new dependencies to the proje
 > [!NOTE]
 > If you used `RUN npm update` instead of `RUN npm install`, docker would re-use this layer.
 
+So to summarize, to optimize your image builds, you should structure your Dockerfile as follows:
+
 ![Dockerfile structure](structuring-docker-file.png)
 
 ## Removing Docker Images
