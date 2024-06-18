@@ -1429,7 +1429,7 @@ The following are examples of the same data written in JSON and YAML formats for
   "tags": ["software", "devops"],
   "author": {
     "first_name": "Mark",
-    "last_name": "Pampuch
+    "last_name": "Pampuch"
   }
 }
 ```
