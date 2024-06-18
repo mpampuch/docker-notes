@@ -390,10 +390,8 @@ EXPOSE 3000
 ```
 
 > [!WARNING]
-> The `EXPOSE` does not automatically publish the port on the host. It is just a form of documentation to tell us this container will eventually listen on port 3000. So later when you properly run this application inside a Docker container, you know that you should map a port on the host to port 3000 on the container. To expose a host port and listen to traffic on the container see [Publishing Ports](#Publishing-Ports).
+> The `EXPOSE` does not automatically publish the port on the host. It is just a form of documentation to tell us this container will eventually listen on port 3000. So later when you properly run this application inside a Docker container, you know that you should map a port on the host to port 3000 on the container. To expose a host port and listen to traffic on the container see the[Publishing Ports](#Publishing-Ports) section.
 
-> [!TIP]
-> You can map a port on the host to the port on these containers in the Dockerfile.
 
 ### `USER`
 
