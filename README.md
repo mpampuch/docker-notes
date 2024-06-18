@@ -1308,7 +1308,7 @@ Breaking down these properties one by one:
   - The driver of the volume. This is `local` by default meaning that this is a directory on the host.
   - There are also drivers for creating volumes to the cloud. If you are working with the cloud, you have to do your own research to find a driver to create a volume in that cloud platform.
 - `"Labels": null`
-  - .
+  - This field would typically contain any user-defined metadata labels associated with the volume. Labels are optional and can be used to tag volumes with additional information for organizational or operational purposes.
 - `"Mountpoint": "/var/lib/docker/volumes/app-data/_data"`
   - This is the path where the volume directory created on the host.
   - On Windows, this would be some `C:\...`
@@ -1318,11 +1318,11 @@ Breaking down these properties one by one:
 > **FOR MAC USERS**: Remember that Docker on Mac runs inside a light-weight Linux virtual machine. So this path that you see in the Mountpoint is a path **inside that Linux virtual machine.** _**It does not exist on your Mac**_. So if you try to go to this directory on you Mac, you are not going to find anything.
 
 - `"Name": "app-data"`
-  - .
+  - Specifies the name of the volume, in this case, "app-data". This name is used to reference and manage the volume within Docker commands.
 - `"Options": null`
-  - .
+  - Options refer to any specific configuration settings or parameters that were used when creating the volume. If no specific options were set during volume creation, this field remains null.
 - `"Scope": "local"`
-  - .
+  - Defines the scope of the volume, which in this case is "local". This indicates that the volume is local to the Docker host where it was created. Docker also supports other scopes, such as "global", which allows volumes to be shared among multiple Docker hosts in a swarm.
 
 So now that you have a volume created, you can start a container and give it this volume in order to persist data using the `-v` option in `docker run`. `-p` will map a volume on the host to a directory in the filesystem of the container. This directory needs to written as it's _**absolute path**_ in the conainer's filesystem. For example:
 
