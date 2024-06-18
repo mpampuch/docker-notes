@@ -1409,6 +1409,49 @@ Docker compose needs to be installed but it is automatically shipped with Docker
 docker-compose --version
 ```
 
+Docker Compose works by using instructions in the `docker-compose.yml` file.
+
+Once the file is complete, you can run Docker Compose by doing:
+
+```bash
+docker-compose up
+```
+
+`docker-compose.yml` is written in YAML format. YAML is another human-readible data language like JSON but it has less clutter and is easier to read.
+
+The following are examples of the same data written in JSON and YAML formats for ease of comparing the two.
+
+```json
+{
+  "name": "Docker",
+  "price": 5,
+  "is_published": true,
+  "tags": ["software", "devops"],
+  "author": {
+    "first_name": "Mark",
+    "last_name": "Pampuch
+  }
+}
+```
+
+```yaml
+---
+name: Docker
+price: 5
+is_published: true
+tags: 
+  - software 
+  - devops
+author: 
+  first_name: Mark
+  last_name: Pampuch
+```
+
+> [!NOTE]
+> `---` at the top of the `.yml`/`.yaml` document indicates the beginning of a YAML file.
+
+The overall conclusion is that YAML files are slower to parse than JSON. This is because since everything is represented as a string, the parser doesn't know what should stay a string and what should be evaluated as a value (e.g. numbers, booleans, etc.). However they are more human-readible. So quite often, we use YAML files for configuration files and JSON for exchanging data between computers.
+
 ### Docker Networking
 
 ### Database migration
