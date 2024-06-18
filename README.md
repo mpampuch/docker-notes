@@ -1478,7 +1478,7 @@ addgroup app && adduser -S -G app app
 ### Managing File Permissions
 
 ```bash
-comchmod u+x deploy.sh    # give the owning user execute permission
+chmod u+x deploy.sh    # give the owning user execute permission
 chmod g+x deploy.sh    # give the owning group execute permission
 chmod o+x deploy.sh    # give everyone else execute permission
 chmod ug+x deploy.sh   # to give the owning user and group execute permission
