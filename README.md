@@ -1361,7 +1361,25 @@ Now, the `/app/data` directory will be created by the `app` user and the user wi
 
 Since the Dockerfile has been modified, the `react-app` image needs to be re-built.
 
-### Sharing Source Code
+Volumes can also be shared across multiple containers.
+
+### Copying Files between the Host and Containers
+
+Lets say you want to copy the file `log.txt` that is in your container but not in your host filesystem. You can do this by running the `docker cp` command. You need to specify a source and destination. Destinations need to be full _**absolute paths**_ to a file or directory.
+
+```bash
+docker cp 2ecf74a0856e:/app/log.txt .
+```
+
+In this case the source is the `/app/log.txt` file in the container with the ID `2ecf74a0856e` and the file was copied to the current directory where this command was run.
+
+To copy a file from the host to a container, you can just perform the command in reverse. Let's say you want to copy a local file `secret.txt` to the filesystem of the container with the ID `2ecf74a0856e`, you can run:
+
+```bash
+docker cp secret.txt 2ecf74a0856e:/app
+```
+
+### Sharing Source Code with a Container
 
 ## Important Linux Information for Docker
 
