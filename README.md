@@ -1381,6 +1381,24 @@ docker cp secret.txt 2ecf74a0856e:/app
 
 ### Sharing Source Code with a Container
 
+Whenever you make a change in the host where you built your Docker image, that change is not immediately visible in the Docker container. If you want to see the changes in the Docker container, you can rebuild the Docker image and re-run it. In production scenarios, you should always build a new image, but for development scenarios, building a new image everytime is very time consuming. You can also copy the changed files to the container, but this is also very tedious and impractical.
+
+The better solution is to create a _binding_ or _mapping_ between the directory in the host filesystem and the container filesystem. This way changes made in the host filesystem will immediately be seen in the container filesystem.
+
+![Host to Container Filesytem Mapping Diagram](docker-host-to-container-mapping.png)
+
+This is done with the same syntax for mapping volumes to containers (`docker run -v`). Instead of binding a named volume (which is a directory that Docker manages) to a container, you instead map the current directory using `$(pwd)`. For example:
+
+```bash
+docker run -d -p 5001:3000 -v $(pwd):/app react-app
+```
+
+If you want, you can still mount a volume to this container. The `-v` flag can be used multiple times. Example:
+
+```bash
+docker run -d -p 5001:3000 -v $(pwd):/app -v app-data:/app/data react-app
+```
+
 ## Important Linux Information for Docker
 
 ### Linux Distributions
@@ -1501,4 +1519,35 @@ chmod g+x deploy.sh    # give the owning group execute permission
 chmod o+x deploy.sh    # give everyone else execute permission
 chmod ug+x deploy.sh   # to give the owning user and group execute permission
 chmod ug-x deploy.sh   # to remove the execute permission from the owning user and group
+```
+
+## Useful Docker aliases
+
+Below are some useful aliases/functions I came up with that help to work with Docker.
+
+These are added to my dotfiles.
+
+```zsh
+getconids() {awk '{print $1}' | tail -n +2} 
+rmcons() {getconids | xargs docker container rm -f}
+```
+
+### Getting and Removing Docker Containers
+
+Removing a lot of Docker containers can be done with:
+
+```bash
+docker ps [-a] | [OPTIONAL grep for filtering] | awk '{print $1}' | tail -n +2 | xargs docker container rm -f
+```
+
+This can be now simplified with:
+
+```bash
+docker ps [-a] | [OPTIONAL grep for filtering] | rmcons
+```
+
+If you would just like to get container IDs without deleting the containers, you can run:
+
+```bash
+docker ps [-a] | [OPTIONAL grep for filtering] | getconids
 ```
