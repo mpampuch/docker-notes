@@ -1421,6 +1421,8 @@ docker-compose up
 
 The following are examples of the same data written in JSON and YAML formats for ease of comparing the two.
 
+JSON
+
 ```json
 {
   "name": "Docker",
@@ -1433,6 +1435,8 @@ The following are examples of the same data written in JSON and YAML formats for
   }
 }
 ```
+
+YAML
 
 ```yaml
 ---
