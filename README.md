@@ -1397,6 +1397,24 @@ If you want, you can still mount a volume to this container. The `-v` flag can b
 docker run -d -p 5001:3000 -v $(pwd):/app -v app-data:/app/data react-app
 ```
 
+## Running Multi-container Apps
+
+### Docker Compose for Building and Running Multi-container applications
+
+Docker Compose is a tool provided by Docker that allows you to define and manage multi-container Docker applications. It uses YAML files to configure the application's services, networks, and volumes, making it easier to orchestrate and run multiple Docker containers that work together.
+
+Docker compose needs to be installed but it is automatically shipped with Docker Desktop for Mac and Windows. To check if it is installed on your machine you can run 
+
+```bash
+docker-compose --version
+```
+
+### Docker Networking
+
+### Database migration
+
+### Running automated tests
+
 ## Important Linux Information for Docker
 
 ### Linux Distributions
@@ -1543,6 +1561,12 @@ This can be now simplified with:
 ```bash
 docker ps [-a] | [OPTIONAL grep for filtering] | rmcons
 ```
+
+> [!NOTE]
+> This can also be done natively with docker just by doing
+> ```
+> docker container rm -f $(docker container ls -aq)
+> ```
 
 If you would just like to get container IDs without deleting the containers, you can run:
 
