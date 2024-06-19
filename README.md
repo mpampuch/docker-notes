@@ -1419,7 +1419,7 @@ docker-compose --version
 
 Docker Compose works by using instructions in the `docker-compose.yml` file.
 
-Once the file is complete, you can run Docker Compose by doing:
+Once the file is complete, you can run your app with Docker Compose by doing:
 
 ```bash
 docker-compose up
@@ -1708,10 +1708,47 @@ The [Docker Compose Docs](https://docs.docker.com/compose/compose-file/) has a f
 
 #### Building Images from a Docker Compose file 
 
-
 Docker Compose is built on top of Docker engine. So everything you have done with Docker engine, like building images, listing them, starting containers, and so on, all of these operations are also available using Docker Compose. You can type subcommands like `docker-compose rm` for removing stopped containers, `docker-compose run` for running containers, etc.The difference is that these commands will apply to the application as a whole. So most of these commands will impact multiple services or multiple containers in the application. 
 
-So let's look at Docker Compose build, and also use the help option. So you have a bunch of options here, a couple of them I want to point out that are useful to know is no cache. With this you can prevent caching when building the image. Sometimes you encounter weird issues and you want to make sure that cache is not used. In that case, you use this option. Another useful option is dash dash pull. With this you can always pull a newer version of the image. That is also good to know. So in this lesson I'm not going to use any of these, you're just going to run Docker Compose build. This build the web and API services, and as you noticed, the build was super fast, because pretty much everything came from the cache. So let's run Docker images. So I have five images on this machine. With the front end, with the web, with the API, with the back end, and Mongo. Mongo obviously came from Dockerhub. Now as part of this build process in this lesson, you built with the web and with the API. These two other images with the front end and back end were built when you started this application earlier. So back to the project, in this original compose file that I included in this project, look, I call this services front end and back end instead of web and API. That is why you have these two images with the front end and with the back end. Also, as you have noticed, when building images with Docker Compose, the images are prefixed with the name of the application. Now where does this come from? It is the name of the directory. So currently you are inside a directory called widly, and that is why all these images are prefixed with widly. I think this is a great convention. Now I've got a question for you. If you look at the created column, you can see all these images were created an hour ago. But didn't you just build the web and API images? Why do you think this happened? Here's the answer. Because I built these images front end and back end an hour ago when I was recording the first lesson in this section, now when building these new images, Docker used everything in the cache because all those files were already available, all those layers were there, so Docker didn't have to do a full rebuild. That is why you are still using the build from an hour ago. Now, if you want to force a full rebuild, you can say Docker Compose build dash dash no cache. Alright, this is going to take a few seconds, so I'll be right back. Alright, the images are built, so let's run Docker images. There you go. Look at the first two images, API and web, were built less than a minute ago. So that's all about building images, next you're going to talk about starting the application. You briefly saw how you can start an application with Docker Compose. you just type Docker Compose up. Now, if the images are ready, Docker Compose will run them inside containers, otherwise it's going to build the images automatically. Now, before executing this, let's look at the available options. So here you have a ton of options, a couple of them that are useful are build, with this you can force a rebuild every time you want to start the application. So you don't have to explicitly run Docker Compose build, and then up. you can combine the two using the build option. The other useful option is dash d for detached mode. So you will start these containers in the background. So, take a look. Alright, now if you run Docker Compose ps, you can see all the containers relevant to this application. In contrast, if you type Docker ps, you can see all the running containers across all applications. So, here you have three containers, bitly, api1, bitlydb1, and web1. What is this one? Well, you can start multiple containers from the same image. And this is used for high availability and scalability. It's something we'll look at in the future. So here you can see the container, you can see what this command started that container, so for the api, that was npm start, for the database, that was MongoD, or mongo daemon process, and for the web front end, that was npm start as well. You can see all these containers are up and running, and over here you can see port mappings. So now if you go to localhost port 3000, you can see the application. Beautiful. Now, how do you take this down? Let's say you're done with this application, and you want to free up resources. Back to the terminal, you type Docker Compose, down. This will stop and remove these containers, but the images are still there.
+Therefore that means to build an image, you can do:
+
+```bash
+docker-compose build
+```
+
+and if you want to force every layer to be built, you can do:
+
+```bash
+docker-compose build --no-cache
+```
+
+### Running a Docker Compose app.
+
+To run your built app you can use:
+
+```bash
+docker-compose up
+```
+
+You can also build your app and run it at the same time by using 
+
+```bash
+docker-compose up --build
+```
+
+To run your app in a detached state, use the `-d` flag:
+
+```bash
+docker-compose up -d
+```
+
+If you type:
+
+```bash
+docker-compose ps
+```
+
+You can see all the containers relavent to this application. This differs from `docker ps` because that will show you all the running containers you have across _**all**_ applications.
 
 ### Docker Networking
 
