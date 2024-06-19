@@ -1552,7 +1552,6 @@ If your application has other moving parts, you can define them here.
 These names are arbitrary, so you can call them anything. For example, another valid thing to call them would be:
 
 ```yaml
-version: "3.8"
 services:
   web:
   api:
