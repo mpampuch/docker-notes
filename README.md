@@ -138,7 +138,7 @@ When you're finished, you can exit the interactive session by typing `exit` and 
 
 ## Dockerfiles
 
-```Dockerfile
+```dockerfile
 FROM         # to specify the base image
 WORKDIR      # to set the working directory
 COPY         # to copy files/directories
@@ -176,7 +176,7 @@ The `FROM` instruction in Dockerfile specifies the base image from which you wan
 
 By default, the image registry that docker uses is Dockerhub. However, you can pull images from any registry, you just need their full url. For example, to pull an image from Microsoft Container Registry, you can use:
 
-```Dockerfile
+```dockerfile
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 ```
 
@@ -203,7 +203,7 @@ The `COPY` instruction in a Dockerfile copies files or directories from the Dock
 >
 > A common pattern is
 >
-> ```Dockerfile
+> ```dockerfile
 > WORDIR /app
 > COPY . .
 > ```
@@ -260,7 +260,7 @@ In shell form, commands are executed using the default shell specified in the Do
 
 Example:
 
-```Dockerfile
+```dockerfile
 RUN apt-get update && \
     apt-get install -y \
     package1 \
@@ -273,7 +273,7 @@ In exec form, commands are executed directly without a shell.
 
 Example:
 
-```Dockerfile
+```dockerfile
 RUN ["apt-get", "update"]
 RUN ["apt-get", "install", "-y", "package1", "package2"]
 ```
@@ -297,7 +297,7 @@ However, **you cannot chain together commands in the exec form**.
 
 If you want to have multiple commands with the exec form, then you have do use the exec form to invoke the shell as follows
 
-```Dockerfile
+```dockerfile
 RUN ["sh", "-c", "addgroup app && adduser -S -G app app"]
 ```
 
@@ -309,7 +309,7 @@ In this case, it is actually **disadvantagous** to use the exec form because:
 
 In this case, just using the shell form would be much better:
 
-```Dockerfile
+```dockerfile
 RUN addgroup app && \
     adduser -S -G app app
 ```
@@ -322,7 +322,7 @@ The `ENV` instruction follows a simple syntax of `ENV <key> <value>`. Multiple v
 
 Example:
 
-```Dockerfile
+```dockerfile
 ENV DATABASE_HOST=db.example.com \
     DATABASE_PORT=5432
 ```
@@ -347,7 +347,7 @@ ENV DATABASE_HOST=db.example.com \
 
 Example:
 
-```Dockerfile
+```dockerfile
 ENV APP_PORT=8080 \
     DB_HOST=localhost \
     DB_PORT=5432
@@ -385,7 +385,7 @@ To create a production build, use npm run build.
 
 To do this, you can tell your container which port your app will be listening on:
 
-```Dockerfile
+```dockerfile
 EXPOSE 3000
 ```
 
@@ -399,7 +399,7 @@ The `USER` instruction in a Dockerfile sets the user or UID (User Identifier) th
 
 Example:
 
-```Dockerfile
+```dockerfile
 RUN addgroup appuser && \
     adduser -S -G appuser appuser
 USER appuser
@@ -415,7 +415,7 @@ The `USER` instruction can also accept either a username or a `UID` (User Identi
 
 Example:
 
-```Dockerfile
+```dockerfile
 USER 1000:1000
 ```
 
@@ -441,7 +441,7 @@ However, in this case, you would need to ensure that the user with that `UID` an
 
 For example:
 
-```Dockerfile
+```dockerfile
 FROM node:14.16.0-alpine3.13
 WORKDIR /app
 COPY . .
@@ -472,7 +472,7 @@ This is a permissions error because the app user was set at the end and all the 
 
 To fix this, reorder the Dockerfile:
 
-```Dockerfile
+```dockerfile
 FROM node:14.16.0-alpine3.13
 RUN addgroup app && adduser -S -G app app
 USER app
@@ -501,7 +501,7 @@ docker run react-app npm start
 
 ...However, since it's tedious to type `npm start` in the `docker run` command everytime, you can set this default command in the Dockerfile with the `CMD` instruction.
 
-```Dockerfile
+```dockerfile
 CMD ["npm", "start"]
 ```
 
@@ -516,7 +516,7 @@ docker run react-app
 >
 > Also since the `CMD` instruction is for defining the default command, it doesn't make sense to have multiple command instructions:
 >
-> ```Dockerfile
+> ```dockerfile
 > CMD npm start
 > CMD npm start
 > CMD npm start
@@ -539,7 +539,7 @@ For example:
 
 If you have a Dockerfile like this
 
-```Dockerfile
+```dockerfile
 CMD ["npm", "start"]
 ```
 
@@ -553,7 +553,7 @@ This will overwrite the `npm start` instruction with `echo hello`.
 
 In contrast, if you're Dockerfile looked like this
 
-```Dockerfile
+```dockerfile
 ENTRYPOINT ["npm", "start"]
 ```
 
@@ -587,7 +587,7 @@ The first place you should look for base images from your projects is Dockerhub,
    - `14.16.0-alpine3.13` is an image that contains node 14 built on the linux distribution alpine. This image is very descriptive and contains major build and minor build and patch number and also the major and minor build for the distribution so that looks good. In additon, often we want to use images that are built on top of the alpine distribution because these are smaller and more lightweight and so the size of these images are smaller leading to faster builds. This image is ~40Mb compressed. This is an example of an image that you should probably **use**.
 5. So in your Dockerfile, on the first line type:
 
-```Dockerfile
+```dockerfile
 FROM node:14.16.0-alpine3.13
 ```
 
@@ -612,7 +612,7 @@ To understand how to optimize builds, you have to understand layers in Docker. A
 
 So for example, if you have a Dockerfile that looks like this:
 
-```Dockerfile
+```dockerfile
 FROM node:14.16.0-alpine3.13
 RUN addgroup add && adduser -S -G app app
 USER app
@@ -626,7 +626,7 @@ CMD ["npm", "start"]
 
 When Docker begins building an image, it will read this first instruction and put it in a layer:
 
-```Dockerfile
+```dockerfile
 FROM node:14.16.0-alpine3.13
 ```
 
@@ -635,7 +635,7 @@ FROM node:14.16.0-alpine3.13
 
 Then Docker is going to execute the second instruction:
 
-```Dockerfile
+```dockerfile
 RUN addgroup add && adduser -S -G app app
 ```
 
@@ -678,7 +678,7 @@ Docker has an optimization feature. It's going to check if any of the instructio
 
 There are some instructions where Docker cannot tell if anything has changed from the Dockerfile alone, for example:
 
-```Dockerfile
+```dockerfile
 COPY . .
 ```
 
@@ -686,7 +686,7 @@ For these instructions, Docker will check the content of the files as well. That
 
 However, once a layer is rebuilt, **all the following layers have to be re-built as well**, even if nothing has changed in these layers. This is where bottlenecks can occur. For example, in the Dockerfile example above, if you make a change in the project directory, then the layers corresponding to the following instructions need to be rebuilt
 
-```Dockerfile
+```dockerfile
 COPY . .
 RUN npm install
 ENV API_URL=http://api.myapp.com/
@@ -696,7 +696,7 @@ CMD ["npm", "start"]
 
 The `RUN npm intall` instruction takes a long time and because it installs all the dependencies for the application. To circumvent this, you can re-organize your Dockerfile so that this command comes before the `COPY . .` command. That way if edits to the directory are made, the dependencies will not need to be reinstalled. Since the only files that you need to run `npm install` are `package.json` and `package.lock.json`, you can re-structure the Dockerfile to look like this.
 
-```Dockerfile
+```dockerfile
 FROM node:14.16.0-alpine3.13
 RUN addgroup add && adduser -S -G app app
 USER app
@@ -1341,7 +1341,7 @@ The same goes for not having to explicitly create a target directly before mount
 
 To fix the above problem, you should create your desired target folder in the Dockerfile. Modify the Dockerfile to look like this:
 
-```Dockerfile
+```dockerfile
 FROM node:14.16.0-alpine3.13
 RUN addgroup add && adduser -S -G app app
 USER app
@@ -1455,6 +1455,253 @@ author:
 > `---` at the top of the `.yml`/`.yaml` document indicates the beginning of a YAML file.
 
 The overall conclusion is that YAML files are slower to parse than JSON. This is because since everything is represented as a string, the parser doesn't know what should stay a string and what should be evaluated as a value (e.g. numbers, booleans, etc.). However they are more human-readible. So quite often, we use YAML files for configuration files and JSON for exchanging data between computers.
+
+#### How to write a Docker Compose file
+
+Let's say you want to create a `docker-compose` file for an app with the following structure:
+
+```
+vidly
+├── backend
+│   ├── Dockerfile
+│   ├── app.js
+│   ├── db.js
+│   ├── docker-entrypoint.sh
+│   ├── index.js
+│   ├── middleware
+│   ├── migrate-mongo-config.js
+│   ├── migrations
+│   ├── models
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── routes
+│   ├── tests
+│   └── wait-for
+├── docker-compose.yml
+└── frontend
+    ├── Dockerfile
+    ├── README.md
+    ├── package-lock.json
+    ├── package.json
+    ├── public
+    └── src
+```
+
+The Dockerfile in the `frontend` app looks like:
+
+```dockerfile
+FROM node:14.16.0-alpine3.13
+
+RUN addgroup app && adduser -S -G app app
+USER app
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+
+EXPOSE 3000 
+
+CMD ["npm", "start"]
+```
+
+The Dockerfile in the `backend` app looks like:
+
+```dockerfile
+FROM node:14.16.0-alpine3.13
+
+RUN addgroup app && adduser -S -G app app
+USER app
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . . 
+
+EXPOSE 3001 
+
+CMD ["npm", "start"]
+```
+
+To begin writing the `docker-compose.yml` file, the first thing you need to set is the `version` property.
+
+> [!WARNING]
+> The docs mention that the `version` property is obsolete. The following information regarding this property may be outdated.
+
+What version should you use? The [the Docker Compose Docs](https://docs.docker.com/compose/compose-file/) list various compose file formats and their compatibility with docker engine. Use the one compatible with the latest version of docker engine, in order to use the latest compose file format so we have access to the latest features. In this example that is `version 3.8`. 
+
+```yaml
+version: "3.8"
+```
+
+You need to wrap this number with double quotes, otherwise it will be evaluated as a number because Docker Compose expects this value to be a string. 
+
+In the rest of this file you define various building blocks or services of our application. So we have a property called `services`.
+
+What services do we need here? Well, the example application has a front end, a back end, and a database. Therefore the services section could look like:
+
+```yaml
+services:
+  frontend:
+  backend:
+  database:
+```
+
+If your application has other moving parts, you can define them here. 
+
+These names are arbitrary, so you can call them anything. For example, another valid thing to call them would be:
+
+```yaml
+version: "3.8"
+services:
+  web:
+  api:
+  db:
+```
+
+The idea here is that you're defining various services and telling Docker how to build images for each service and how to run these images. So here you're going to have properties, and the value of these properties will eventually be used when running our containers. This way, you don't have to manually run your containers using `docker run`, and here you use parameters like `-p` for port mapping or `-v` for volume mapping. Docker Compose will take care of starting your containers under the hood. 
+
+
+For each service, you need to tell Docker how to build an image for that service. For that you can use the `build` property and tell Docker Compose where it can find a Dockerfile. 
+
+```yaml
+version: "3.8"
+services:
+  web:
+    build: ./frontend
+  api:
+    build: ./backend
+```
+
+For the database in this example, the image is not going to be built. Instead, it is going to be pulled from Dockerhub. Therefore, instead of the `build` property, use the `image` property instead. 
+
+
+```yaml
+version: "3.8"
+services:
+  web:
+    build: ./frontend
+  api:
+    build: ./backend
+  db:
+    img: mongo:4.0-xenial
+```
+
+So for any of these services, you can either build an image or pull it down. 
+
+You now can map ports to each of these app components using the `port` property. Because you can have multiple port mappings, here you need to use the array or less syntax. 
+
+```yaml
+version: "3.8"
+services:
+  web:
+    build: ./frontend
+    ports:
+      - 3000:3000
+  api:
+    build: ./backend
+    ports:
+      - 3001:3001
+  db:
+    img: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+```
+
+> [!NOTE]
+> For the database, MongoDB by default listens on port `27017`. You want to map the same port in order for you to be able to access MongoDB using a MongoDB client like MongoDB Compass. Even if you don't use MongoDB, **you have the same concept with other database engines. All these database engines listen on the default port, you want to map that port so you can connect to your database engine using your favorite database client.**
+
+The next step for this example is to set up an environmental variable. The API project needs an environment variable that tells where the database is. You can do this with the `environment` property. This property can use the list syntax because you can have multiple environment variables. 
+
+```yaml
+api:
+    build: ./backend
+    ports:
+      - 3001:3001
+    environment:
+      - DB_URL=mongodb://db/vidly
+```
+
+> [!NOTE]
+> What does this environment variable mean? This is a MongoDB connection string but structured for this app run with Docker Compose. 
+> 
+> MongoDB connection strings always start with `mongodb://` and then the name of a host. When you start an application with Docker Compose, under the hood, a network is created. On this network you're going to have three hosts. The name of these hosts are equal to the names you have defined here. So in this case, the names of the hosts are `web`, `api`, and `db`. In order to connect to the MongoDB server, you type `mongodb://db`. On this server you can have multiple databases, so you're going to specify the database name (in this case `vidly`) in the connection string as well. Therefore, the final MongoDB connection string will be `mongodb://db/vidly`.
+
+Instead of using the list syntax, you can also use the object or property value syntax. 
+
+```yaml
+api:
+    build: ./backend
+    ports:
+      - 3001:3001
+    environment:
+      DB_URL: mongodb://db/vidly
+```
+
+This syntax is preferable because it's more readible. You get the syntax highlighting and it's just cleaner. 
+
+The Docker Compose file is almost complete. The last thing you want to add here is a volume. This is because you don't want MongoDB to write data to the temporary file system of the container. So here you set volumes with the `volumes` property. Again you can have one or more volume mappings so you use the list or array syntax. You can call this volume anything anything, but in this example, `vidly` is the name of the volume you're going to map to a directory inside the container.
+
+```yaml
+version: "3.8"
+services:
+  web:
+    build: ./frontend
+    ports:
+      - 3000:3000
+  api:
+    build: ./backend
+    ports:
+      - 3001:3001
+  db:
+    img: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+    volumes:
+      - vidly:/data/db
+```
+
+> [!NOTE]
+> Where does `/data/db` come from? If you look at the documentation of MongoDB on Dockerhub or just a typical MongoDB documentation, you know that by default MongoDB stores this data in `/data/db`. 
+
+So you want to map this volume to this directory, so whatever that is written inside this directory is actually outside of this container. It's somewhere else in the volume. 
+
+Now because you have used this volume here, you have to define it in the compose file. Here you're going to define another property called `volumes`, and here you're going to add another property called `vidly`, with no value. 
+
+```yaml
+version: "3.8"
+services:
+  web:
+    build: ./frontend
+    ports:
+      - 3000:3000
+  api:
+    build: ./backend
+    ports:
+      - 3001:3001
+  db:
+    img: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+    volumes:
+      - vidly:/data/db
+volumes:
+  vidly:
+```
+
+> [!NOTE]
+> Make sure you remove all the indentation before defining the `volumes` property to ensure it doesn't get nested inside the `services` or `db` keys.
+> 
+> Also assigning no value after `vidly:` is valid YAML syntax. It looks a little bit weird but this is the syntax you have to follow for Docker Compose to work.
+
+The `docker-compose` file is now complete.
+
+The [Docker Compose Docs](https://docs.docker.com/compose/compose-file/) has a full list of the properties you can use to create your `docker-compose` file. A lot of these are for really special cases. So the ones that you will be needing to use most often are just `build`, `image`, `ports`, `volumes`, and `environment`.
+
+#### Building Images from a Docker Compose file 
+
+
+Earlier I told you that Docker Compose is built on top of Docker engine. So everything you have done with Docker engine, like building images, listing them, starting containers, and so on, all of these operations are also available using Docker Compose. Let me show you. So you type Docker Compose without any arguments, enter, look, you have all these subcommands, like you have rm for removing stopped containers, you have run, you have push, pull, and so on. The difference is that any of these commands will apply to the application as a whole. So most of these commands will impact multiple services or multiple containers in the application. So let's look at Docker Compose build, and also use the help option. So you have a bunch of options here, a couple of them I want to point out that are useful to know is no cache. With this you can prevent caching when building the image. Sometimes you encounter weird issues and you want to make sure that cache is not used. In that case, you use this option. Another useful option is dash dash pull. With this you can always pull a newer version of the image. That is also good to know. So in this lesson I'm not going to use any of these, you're just going to run Docker Compose build. This build the web and API services, and as you noticed, the build was super fast, because pretty much everything came from the cache. So let's run Docker images. So I have five images on this machine. With the front end, with the web, with the API, with the back end, and Mongo. Mongo obviously came from Dockerhub. Now as part of this build process in this lesson, you built with the web and with the API. These two other images with the front end and back end were built when you started this application earlier. So back to the project, in this original compose file that I included in this project, look, I call this services front end and back end instead of web and API. That is why you have these two images with the front end and with the back end. Also, as you have noticed, when building images with Docker Compose, the images are prefixed with the name of the application. Now where does this come from? It is the name of the directory. So currently you are inside a directory called widly, and that is why all these images are prefixed with widly. I think this is a great convention. Now I've got a question for you. If you look at the created column, you can see all these images were created an hour ago. But didn't you just build the web and API images? Why do you think this happened? Here's the answer. Because I built these images front end and back end an hour ago when I was recording the first lesson in this section, now when building these new images, Docker used everything in the cache because all those files were already available, all those layers were there, so Docker didn't have to do a full rebuild. That is why you are still using the build from an hour ago. Now, if you want to force a full rebuild, you can say Docker Compose build dash dash no cache. Alright, this is going to take a few seconds, so I'll be right back. Alright, the images are built, so let's run Docker images. There you go. Look at the first two images, API and web, were built less than a minute ago. So that's all about building images, next you're going to talk about starting the application. You briefly saw how you can start an application with Docker Compose. you just type Docker Compose up. Now, if the images are ready, Docker Compose will run them inside containers, otherwise it's going to build the images automatically. Now, before executing this, let's look at the available options. So here you have a ton of options, a couple of them that are useful are build, with this you can force a rebuild every time you want to start the application. So you don't have to explicitly run Docker Compose build, and then up. you can combine the two using the build option. The other useful option is dash d for detached mode. So you will start these containers in the background. So, take a look. Alright, now if you run Docker Compose ps, you can see all the containers relevant to this application. In contrast, if you type Docker ps, you can see all the running containers across all applications. So, here you have three containers, bitly, api1, bitlydb1, and web1. What is this one? Well, you can start multiple containers from the same image. And this is used for high availability and scalability. It's something we'll look at in the future. So here you can see the container, you can see what this command started that container, so for the api, that was npm start, for the database, that was MongoD, or mongo daemon process, and for the web front end, that was npm start as well. You can see all these containers are up and running, and over here you can see port mappings. So now if you go to localhost port 3000, you can see the application. Beautiful. Now, how do you take this down? Let's say you're done with this application, and you want to free up resources. Back to the terminal, you type Docker Compose, down. This will stop and remove these containers, but the images are still there.
 
 ### Docker Networking
 
