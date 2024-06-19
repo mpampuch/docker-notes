@@ -1750,6 +1750,17 @@ docker-compose ps
 
 You can see all the containers relavent to this application. This differs from `docker ps` because that will show you all the running containers you have across _**all**_ applications.
 
+This will produce some output like:
+
+```
+NAME          IMAGE              COMMAND                  SERVICE   CREATED          STATUS          PORTS
+vidly-api-1   vidly-api          "docker-entrypoint.s…"   api       24 seconds ago   Up 22 seconds   0.0.0.0:3001->3001/tcp
+vidly-db-1    mongo:4.0-xenial   "docker-entrypoint.s…"   db        24 seconds ago   Up 22 seconds   0.0.0.0:27017->27017/tcp
+vidly-web-1   vidly-web          "docker-entrypoint.s…"   web       24 seconds ago   Up 22 seconds   0.0.0.0:3000->3000/tcp
+```
+
+Why do the container names have a `-1` appended to them? This is because you can start multiple containers for each image. This is useful for high-availability and scalability.
+
 ### Docker Networking
 
 ### Database migration
