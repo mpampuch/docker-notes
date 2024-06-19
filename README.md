@@ -1722,7 +1722,7 @@ and if you want to force every layer to be built, you can do:
 docker-compose build --no-cache
 ```
 
-### Running a Docker Compose app.
+### Running a Docker Compose App
 
 To run your built app you can use:
 
@@ -1745,7 +1745,7 @@ docker-compose up -d
 If you type:
 
 ```bash
-docker-compose ps
+docker-compose ps --no-trunc
 ```
 
 You can see all the containers relavent to this application. This differs from `docker ps` because that will show you all the running containers you have across _**all**_ applications.
@@ -1753,13 +1753,27 @@ You can see all the containers relavent to this application. This differs from `
 This will produce some output like:
 
 ```
-NAME          IMAGE              COMMAND                  SERVICE   CREATED          STATUS          PORTS
-vidly-api-1   vidly-api          "docker-entrypoint.s…"   api       24 seconds ago   Up 22 seconds   0.0.0.0:3001->3001/tcp
-vidly-db-1    mongo:4.0-xenial   "docker-entrypoint.s…"   db        24 seconds ago   Up 22 seconds   0.0.0.0:27017->27017/tcp
-vidly-web-1   vidly-web          "docker-entrypoint.s…"   web       24 seconds ago   Up 22 seconds   0.0.0.0:3000->3000/tcp
+NAME          IMAGE              COMMAND                            SERVICE   CREATED         STATUS         PORTS
+vidly-api-1   vidly-api          "docker-entrypoint.sh npm start"   api       5 minutes ago   Up 5 minutes   0.0.0.0:3001->3001/tcp
+vidly-db-1    mongo:4.0-xenial   "docker-entrypoint.sh mongod"      db        5 minutes ago   Up 5 minutes   0.0.0.0:27017->27017/tcp
+vidly-web-1   vidly-web          "docker-entrypoint.sh npm start"   web       5 minutes ago   Up 5 minutes   0.0.0.0:3000->3000/tcp
 ```
 
-Why do the container names have a `-1` appended to them? This is because you can start multiple containers for each image. This is useful for high-availability and scalability.
+In the `NAME` column you can see the names of all the containers for this app. Each container name has a `-1` appended to them because you can start multiple containers for each image. This is useful for high-availability and scalability.
+
+In the `IMAGE` column you can see the name of the image used to build the container.
+
+In the `COMMAND` column you can see which commands Docker Compose used to start each container.
+
+### Stopping a Docker Compose App
+
+If you want to stop an application from running and free up resources, you can use:
+
+```bash
+docker-compose down
+```
+
+This will stop and remove all the running containers for this app. However, all the images for this app are still there. So the next time you want to start the application the application will start pretty quickly. 
 
 ### Docker Networking
 
