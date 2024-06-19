@@ -1583,7 +1583,7 @@ services:
   api:
     build: ./backend
   db:
-    img: mongo:4.0-xenial
+    image: mongo:4.0-xenial
 ```
 
 So for any of these services, you can either build an image or pull it down. 
@@ -1602,7 +1602,7 @@ services:
     ports:
       - 3001:3001
   db:
-    img: mongo:4.0-xenial
+    image: mongo:4.0-xenial
     ports:
       - 27017:27017
 ```
@@ -1653,7 +1653,7 @@ services:
     ports:
       - 3001:3001
   db:
-    img: mongo:4.0-xenial
+    image: mongo:4.0-xenial
     ports:
       - 27017:27017
     volumes:
@@ -1679,7 +1679,7 @@ services:
     ports:
       - 3001:3001
   db:
-    img: mongo:4.0-xenial
+    image: mongo:4.0-xenial
     ports:
       - 27017:27017
     volumes:
