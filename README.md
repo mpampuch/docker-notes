@@ -1844,9 +1844,20 @@ ping api
 
 So you can see because the ping recieved a response from the container, the containers in the Docker network are able to communicate with each other.
 
-#### How Docker Network Works
+#### How the Docker Network Works
+
+This is what happens under the hood for the last example:
+
+1. Docker comes with an embedded DNS server which contains the name and IP of all the containers on the network. Inside each container you have a component called the DNS Resolver. This component talks to the DNS Server to find the IP address of the target container.
+
+2. When you ping the `api` container from the `web` container, the DNS Resolver inside the `web` container asks the DNS server what is the address of the `api` machine / container?
+
+3. The DNS Server returns the IP address to the DNS Resolver and then the `web` container can directly talk to the `api` container using it's IP address.
+
+Remember: Each container has an IP address because it it part of a network.
 
 ![How Docker Network works](docker-network.gif)
+
 
 ### Database migration
 
