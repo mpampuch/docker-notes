@@ -1836,7 +1836,7 @@ ping api
 # 64 bytes from 172.19.0.4: seq=1 ttl=64 time=0.191 ms
 # 64 bytes from 172.19.0.4: seq=2 ttl=64 time=0.191 ms
 # 64 bytes from 172.19.0.4: seq=3 ttl=64 time=0.181 ms
-# ^C
+# 
 # --- api ping statistics ---
 # 4 packets transmitted, 4 packets received, 0% packet loss
 # round-trip min/avg/max = 0.119/0.170/0.191 ms
@@ -1945,6 +1945,24 @@ docker logs 484b9cf436d1 -f
 
 # In Window 3: view the db container
 docker logs b4cbefb7a7c4 -f
+```
+
+### Publishing Changes
+
+To map your project directories to the `/app` directories inside your containers so that your containers can recieve the edits without having to be rebuilt everytime you change some code on in your local directories, you can do the following:
+
+Inside your `docker-compose.yml`, add a `volume` to each service that has a corresponding folder in your local directory.
+
+```yaml
+services:
+  web:
+    ...
+    volumes:
+      - ./frontend:/app
+  api:
+    ...
+    volumes:
+      - ./backend:/app
 ```
 
 ### Database Migration
