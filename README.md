@@ -1405,6 +1405,9 @@ If you want, you can still mount a volume to this container. The `-v` flag can b
 docker run -d -p 5001:3000 -v $(pwd):/app -v app-data:/app/data react-app
 ```
 
+> [!WARNING]
+> Be aware that since now you are sharing the local directory to the container `/app` directory. If there are some files that used to be on your conatiner but are not in your local directory after you mounted your local directory, this may cause issues in your app. This is often the case for directories like `node_modules` which is typically absent in local projects but built on containers. Make sure all the required files and directories for the app to work are present in your local environment. This is often easily fixed by going to your local environment and running `npm install`.
+
 ## Running Multi-container Apps
 
 ### Docker Compose for Building and Running Multi-container applications
@@ -1973,6 +1976,39 @@ services:
 >
 > You don't have to do with with `docker-compose` files. These files accept **relative paths** as syntax.
 
+So the full `docker-compose.yml` file for this app would look like:
+
+```yaml
+---
+version: "3.8"
+
+services:
+  web:
+    build: ./frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/app
+  api:
+    build: ./backend
+    ports:
+      - 3001:3001
+    volumes:
+      - ./backend:/app
+  db:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+    volumes:
+      - vidly:/data/db
+
+volumes:
+  vidly:
+```
+
+> [!WARNING]
+> Be aware that since now you are sharing the local directory to the container `/app` directory. If there are some files that used to be on your conatiner but are not in your local directory after you mounted your local directory, this may cause issues in your app. This is often the case for directories like `node_modules` which is typically absent in local projects but built on containers. Make sure all the required files and directories for the app to work are present in your local environment. This is often easily fixed by going to your local environment and running `npm install`.
+
 ### Database Migration
 
 ### Running Automated Tests
@@ -2126,7 +2162,7 @@ docker ps [-a] | [OPTIONAL grep FOR FILTERING] | rmcons
 
 > [!NOTE]
 > This can also be done natively with docker just by doing
-> ```
+> ```bash
 > docker container rm -f $(docker container ls -aq)
 > ```
 
