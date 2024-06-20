@@ -1937,5 +1937,5 @@ docker ps [-a] | [OPTIONAL grep FOR FILTERING] | rmcons
 If you would just like to get container IDs without deleting the containers, you can run:
 
 ```bash
-docker ps [-a] | [OPTIONAL grep for filtering] | getconids
+docker ps [-a] | [OPTIONAL grep FOR FILTERING] | getconids
 ```
