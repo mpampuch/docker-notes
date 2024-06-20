@@ -1777,6 +1777,77 @@ This will stop and remove all the running containers for this app. However, all 
 
 ### Docker Networking
 
+When you run an app with Docker Compose, Docker Compose will automatically create a _network_ and add your containers to that network. This allows your containers to "talk" to each other.
+
+For example, this is an output you might get running `docker-compose up -d`:
+
+```
+[+] Running 4/4
+ ✔ Network vidly_default  Created                                        0.0s
+ ✔ Container vidly-web-1  Started                                        0.2s
+ ✔ Container vidly-api-1  Started                                        0.2s
+ ✔ Container vidly-db-1   Started                                        0.2s
+```
+
+You'll notice that just by running the command Docker Compose automatically created `Network vidly_default`.
+
+To see all the networks on the machine, you can run:
+
+```bash
+docker network ls
+```
+
+```
+NETWORK ID     NAME            DRIVER    SCOPE
+5bebd4aeba0c   bridge          bridge    local
+704f75519318   host            host      local
+a500d72d39af   none            null      local
+51bf0f61617d   vidly_default   bridge    local
+```
+
+Every Docker installation has three networks. `bridge`, `host`, and `none`. You don't have to worry about what these are for they are not that important. What matters is that you can see that the network for the app, `vidly_default`, was created. On Linux, the driver for this network is `bridge` and on Windows it is `NAT`.  
+
+The network in this example contains three hosts/containers. These being `web`, `api`, and `db`. To prove that these containers can talk to each other using their name you can do this:
+
+1. Grab the container ID for your container of interest
+
+```bash
+docker ps
+# Outputs:
+# CONTAINER ID   IMAGE              COMMAND                  CREATED          STATUS          PORTS                      NAMES
+# 484b9cf436d1   vidly-api          "docker-entrypoint.s…"   38 minutes ago   Up 38 minutes   0.0.0.0:3001->3001/tcp     vidly-api-1
+# b4cbefb7a7c4   mongo:4.0-xenial   "docker-entrypoint.s…"   38 minutes ago   Up 38 minutes   0.0.0.0:27017->27017/tcp   vidly-db-1
+# 65e7c1a5cb7c   vidly-web          "docker-entrypoint.s…"   38 minutes ago   Up 38 minutes   0.0.0.0:3000->3000/tcp     vidly-web-1
+```
+
+2. Start an interactive shell session on a container as the `root` user (you'll need root permissions because you are going to need permission to use the `ping` command):
+
+```bash
+docker exec -it -u root 65e7c1a5cb7c sh
+```
+
+3. Inside the container, ping another container just using it's name:
+
+```bash
+ping api
+# Outputs:
+# PING api (172.19.0.4): 56 data bytes
+# 64 bytes from 172.19.0.4: seq=0 ttl=64 time=0.119 ms
+# 64 bytes from 172.19.0.4: seq=1 ttl=64 time=0.191 ms
+# 64 bytes from 172.19.0.4: seq=2 ttl=64 time=0.191 ms
+# 64 bytes from 172.19.0.4: seq=3 ttl=64 time=0.181 ms
+# ^C
+# --- api ping statistics ---
+# 4 packets transmitted, 4 packets received, 0% packet loss
+# round-trip min/avg/max = 0.119/0.170/0.191 ms
+```
+
+So you can see because the ping recieved a response from the container, the containers in the Docker network are able to communicate with each other.
+
+#### How Docker Network Works
+
+![How Docker Network works](docker-network.gif)
+
 ### Database migration
 
 ### Running automated tests
