@@ -1919,13 +1919,13 @@ rmcons() {getconids | xargs docker container rm -f}
 Removing a lot of Docker containers can be done with:
 
 ```bash
-docker ps [-a] | [OPTIONAL grep for filtering] | awk '{print $1}' | tail -n +2 | xargs docker container rm -f
+docker ps [-a] | [OPTIONAL grep FOR FILTERING] | awk '{print $1}' | tail -n +2 | xargs docker container rm -f
 ```
 
 This can be now simplified with:
 
 ```bash
-docker ps [-a] | [OPTIONAL grep for filtering] | rmcons
+docker ps [-a] | [OPTIONAL grep FOR FILTERING] | rmcons
 ```
 
 > [!NOTE]
