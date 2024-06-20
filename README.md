@@ -1965,6 +1965,14 @@ services:
       - ./backend:/app
 ```
 
+> [!NOTE]
+> Remember that when publishing changes using Docker without Docker Compose, you need to specify the **absolute path** of the local directory. This is why the `$(pwd)` syntax was used.
+> ```bash
+> docker run -v $(pwd):/app 
+> ```
+>
+> You don't have to do with with `docker-compose` files. These files accept **relative paths** as syntax.
+
 ### Database Migration
 
 ### Running Automated Tests
