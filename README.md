@@ -1911,9 +1911,45 @@ db:
 
 This means that you can access this database now through `localhost:27017`. If you're using some database client like MongoDB Compass, this is what you would pass into Hostname and Ports sections.
 
-### Database migration
+### Viewing Logs
 
-### Running automated tests
+To view the logs of all the containers in the application in one place, run:
+
+```bash
+docker-compose logs
+```
+
+You have access to the same options as with `docker logs`, e.g. `-f` to follow, `-t` to show timestampes, etc.
+
+By default this command will log all the logs of all the containers in one place. A common workflow for people that have enough space on their monitors is to show logs from each container in their own seperate windows. To achieve this, you can do:
+
+1. Get all the container ids for your app:
+
+```bash
+docker ps
+# Outputs:
+# CONTAINER ID   IMAGE              COMMAND                  CREATED       STATUS       PORTS                      NAMES
+# 484b9cf436d1   vidly-api          "docker-entrypoint.s…"   2 hours ago   Up 2 hours   0.0.0.0:3001->3001/tcp     vidly-api-1
+# b4cbefb7a7c4   mongo:4.0-xenial   "docker-entrypoint.s…"   2 hours ago   Up 2 hours   0.0.0.0:27017->27017/tcp   vidly-db-1
+# 65e7c1a5cb7c   vidly-web          "docker-entrypoint.s…"   2 hours ago   Up 2 hours   0.0.0.0:3000->3000/tcp     vidly-web-1
+```
+
+2. Then open up 3 new windows. Type the following in:
+
+```bash
+# In Window 1: view the web container
+docker logs 65e7c1a5cb7c -f
+
+# In Window 2: view the api container
+docker logs 484b9cf436d1 -f
+
+# In Window 3: view the db container
+docker logs b4cbefb7a7c4 -f
+```
+
+### Database Migration
+
+### Running Automated Tests
 
 ## Important Linux Information for Docker
 
