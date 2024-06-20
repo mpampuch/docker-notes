@@ -1330,7 +1330,7 @@ Breaking down these properties one by one:
 - `"Scope": "local"`
   - Defines the scope of the volume, which in this case is "local". This indicates that the volume is local to the Docker host where it was created. Docker also supports other scopes, such as "global", which allows volumes to be shared among multiple Docker hosts in a swarm.
 
-So now that you have a volume created, you can start a container and give it this volume in order to persist data using the `-v` option in `docker run`. `-p` will map a volume on the host to a directory in the filesystem of the container. This directory needs to written as it's _**absolute path**_ in the conainer's filesystem. For example:
+So now that you have a volume created, you can start a container and give it this volume in order to persist data using the `-v` option in `docker run`. `-p` will map a volume on the host to a directory in the filesystem of the container. This directory needs to written as it's _**absolute path**_ in the container's filesystem. For example:
 
 ```bash
 docker run -d -p 4000:3000 -v app-data:/app/data react-app
@@ -1858,6 +1858,58 @@ Remember: Each container has an IP address because it it part of a network.
 
 ![How Docker Network works](docker-network.gif)
 
+#### Accessing Containers in the Docker Network through Ports
+
+Back inside the `web` container, if you run:
+
+```bash
+ifconfig
+```
+
+You will get an output similar to this:
+
+```
+eth0      Link encap:Ethernet  HWaddr 02:42:AC:13:00:03
+          inet addr:172.19.0.3  Bcast:172.19.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:253 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:98 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:306496 (299.3 KiB)  TX bytes:7681 (7.5 KiB)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:12 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:12 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:1214 (1.1 KiB)  TX bytes:1214 (1.1 KiB)
+```
+
+Here you can see that this container has two network adapters: `eth0` and `lo`. You can see that `172.19.0.3` is the IP address of `eth0`. **This is the IP address of this container (aka the `web` container)**. 
+
+Remember that in the `docker-compose.yml` file, inside the `api` service, there was a MongoDB connection string that was added:
+
+```yaml
+api:
+  ...
+  environment:
+    DB_URL: mongodb://db/vidly
+```
+
+Inside this connection string you have `db`, which is the name of the host (the `db` container). So now you know that this is valid syntax because the `api` container can talk to the `db` container using it's name because they are on the same network and because of how the Docker network works. 
+
+This means though that this host `db`, and consequently the MongoDB connection string `mongodb://db/vidly`, is **only available inside the Docker environment**. This means that if you go to your browser and type `localhost:db` or `localhost/db` you will not get anything. If you want to access this container you need **port mapping**. This is why in the `db` service in the `docker-compose` file, we put:
+
+```yaml
+db:
+  ...
+  ports:
+    - 27017:27017
+```
+
+This means that you can access this database now through `localhost:27017`. If you're using some database client like MongoDB Compass, this is what you would pass into Hostname and Ports sections.
 
 ### Database migration
 
