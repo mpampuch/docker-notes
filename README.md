@@ -2075,7 +2075,7 @@ Sometimes, a command inside a `docker-compose` file might be very long and it mi
 #!/bin/sh
 
 echo "Waiting for MongoDB to start..."
-./wait-for db:27017
+./wait-for-it.sh db:27017
 
 echo "Waiting for MongoDB to 
 start..."
