@@ -1976,7 +1976,7 @@ services:
 >
 > You don't have to do with with `docker-compose` files. These files accept **relative paths** as syntax.
 
-So the full `docker-compose.yml` file for this app would look like:
+So the full updated `docker-compose.yml` file for this app would look like:
 
 ```yaml
 ---
@@ -2009,7 +2009,9 @@ volumes:
 > [!WARNING]
 > Be aware that since now you are sharing the local directory to the container `/app` directory. If there are some files that used to be on your conatiner but are not in your local directory after you mounted your local directory, this may cause issues in your app. This is often the case for directories like `node_modules` which is typically absent in local projects but built on containers. Make sure all the required files and directories for the app to work are present in your local environment. This is often easily fixed by going to your local environment and running `npm install`.
 
-### Database Migration
+### Overwriting Default Container Commands with Docker Compose
+
+Most of the time when you release an application, you want the database to be in a particular state with some data. This is called _database migration_.
 
 ### Running Automated Tests
 
