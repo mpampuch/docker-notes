@@ -1982,7 +1982,7 @@ services:
 >
 > You don't have to do with with `docker-compose` files. These files accept **relative paths** as syntax.
 
-So the full updated `docker-compose.yml` file for this app would look like:
+So the full, updated `docker-compose.yml` file for this app would look like:
 
 ```yaml
 ---
@@ -2087,7 +2087,77 @@ api:
   command: ./docker-entrypoint.sh
 ```
 
+Therefore the full, updated `docker-compose.yml` file for this app would look like:
+
+```yaml
+---
+version: "3.8"
+
+services:
+  web:
+    build: ./frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/app
+  api:
+    build: ./backend
+    ports:
+      - 3001:3001
+    volumes:
+      - ./backend:/app
+    command: ./docker-entrypoint.sh
+  db:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+    volumes:
+      - vidly:/data/db
+
+volumes:
+  vidly:
+```
+
 ### Running Automated Tests
+
+In this example, there are a bunch of unit and integration tests for both the `frontend` and `backend` projects.
+
+One way to run these tests is _outside_ of a container, simply by running script like:
+
+```bash
+npm test
+```
+
+However, another way to run tests is to run _inside_ Docker containers. This can be very slow, and normally you want unit tests to execute quickly so that you can get rapid feedback when you're writing code. If you would still prefer to do this, you can modify your `docker-compose.yml` file to look like this:
+
+```yaml
+---
+version: "3.8"
+
+services:
+  web:
+    build: ./frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/app
+  api:
+    build: ./backend
+    ports:
+      - 3001:3001
+    volumes:
+      - ./backend:/app
+    command: ./docker-entrypoint.sh
+  db:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+    volumes:
+      - vidly:/data/db
+
+volumes:
+  vidly:
+```
 
 ## Important Linux Information for Docker
 
