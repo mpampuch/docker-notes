@@ -1669,6 +1669,8 @@ services:
     build: ./backend
     ports:
       - 3001:3001
+    environment:
+      DB_URL: mongodb://db/vidly
   db:
     image: mongo:4.0-xenial
     ports:
@@ -1696,6 +1698,8 @@ services:
     build: ./backend
     ports:
       - 3001:3001
+    environment:
+      DB_URL: mongodb://db/vidly
   db:
     image: mongo:4.0-xenial
     ports:
@@ -1999,6 +2003,8 @@ services:
     build: ./backend
     ports:
       - 3001:3001
+    environment:
+      DB_URL: mongodb://db/vidly
     volumes:
       - ./backend:/app
   db:
@@ -2104,6 +2110,8 @@ services:
     build: ./backend
     ports:
       - 3001:3001
+    environment:
+      DB_URL: mongodb://db/vidly
     volumes:
       - ./backend:/app
     command: ./docker-entrypoint.sh
@@ -2141,13 +2149,27 @@ services:
       - 3000:3000
     volumes:
       - ./frontend:/app
+  web-tests:
+    image: vidly_web
+    volumes:
+      - ./frontend:/app
+    command: npm test
   api:
     build: ./backend
     ports:
       - 3001:3001
+    environment:
+      DB_URL: mongodb://db/vidly
     volumes:
       - ./backend:/app
     command: ./docker-entrypoint.sh
+  api-tests:
+    image: vidly_api
+    environment:
+      DB_URL: mongodb://db/vidly
+    volumes:
+      - ./backend:/app
+    command: npm test
   db:
     image: mongo:4.0-xenial
     ports:
@@ -2158,6 +2180,24 @@ services:
 volumes:
   vidly:
 ```
+
+So to summarize what you need to do to build test images:
+- Duplicate a service configuration for the service you want to test. You can call something like `SERVICE-tests`
+- Change the `build` property to `image` because you're going to be using an existing image. That image's name is `vidley_web`
+- You don't need `ports` because you don't want to access this service directly like you accessed the web service.
+- You want to keep the `volumes` as it is because you want to any changes you make to your application code or your tests to be immediately visibile here inside the test containers.
+- You want to override the default command for these test images to the command you use to run your unit and integration tests. In this case it is `npm test`
+
+Once this is done you can watch the unit tests work by just restarting your application with Docker Compose:
+
+```bash
+docker-compose up
+```
+
+> [!WARNING]
+> Just be aware that if you make any changes in your local repositories, it will take a little while for your tests to be re-run. This is why running automated tests may not be the right approach for you if it hampers your development time too much.
+
+The good thing about this approach is that you don't need to open up different windows and run tests for your frontend and backend components seperately.
 
 ## Important Linux Information for Docker
 
