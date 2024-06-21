@@ -2013,6 +2013,74 @@ volumes:
 
 Most of the time when you release an application, you want the database to be in a particular state with some data. This is called _database migration_.
 
+For apps using MongoDB, this is often done using a tool called `migrate-mongo` with the `up` or `down` commands.
+
+You want this command to run before you start your web server on your container. There is a problem with the way things are set up right now, which is that in the `Dockerfile` in the `backend` directory, the web server is started right away because of:
+
+```dockerfile
+CMD ["npm", "start"]
+```
+
+To get around this, you can **overwrite** default commands for starting docker containers using the `command` property inside of your `docker-compose` file. For example:
+
+```yaml
+api:
+  ...
+  command: migrate-mongo up && npm start
+```
+
+The problem with this set up right now is that the `db` server is not up and running or ready to recieve information at the time of running the `migrate-mongo up` command. To fix this you need to use a _**waiting script**_.
+
+#### Using Waiting Scripts
+
+On startup, Compose does not wait until a container is "ready", only until it's running. This can cause issues if, for example, you have a relational database system that needs to start its own services before being able to handle incoming connections.
+
+You can try to fix this by using some tools on the [official Docker Compose documenation](https://docs.docker.com/compose/startup-order/) or by using this `wait-for-it.sh` script found [here](https://github.com/vishnubob/wait-for-it).
+
+The following shows the `wait-for-it` approach:
+
+1. Inside your `backend` folder store the `wait-for-it.sh` script
+
+2. Back in your `docker-compose.yml` file, you can then say
+
+```yaml
+api:
+  ...
+  command: ./wait-for-it.sh db:27017 && migrate-mongo up && npm start
+```
+
+- By specifying `db:27017` as the argument for the `wait-for-it.sh` script, you are telling it that you want to wait to start the execution of the rest of your code until port `27017` on the `db` server recieves traffic. Once this is ready, then you can migrate the database.
+
+#### Using Entrypoint Scripts
+
+Sometimes, a command inside a `docker-compose` file might be very long and it might be better to extract it into it's own script. This would be justified for the command that was written in the above example. To do this:
+
+1. Create an executable file called `docker-entrypoint.sh`
+
+2. Populate the shell script with your commands
+
+```sh
+#!/bin/sh
+
+echo "Waiting for MongoDB to start..."
+./wait-for db:27017
+
+echo "Waiting for MongoDB to 
+start..."
+npm run db:up
+
+echo "Waiting for MongoDB to start..."
+npm start
+```
+
+3. Replace the command in you `docker-compose.yml` file with the shell script.
+
+```yaml
+api:
+  ...
+  command: ./docker-entrypoint.sh
+```
+
 ### Running Automated Tests
 
 ## Important Linux Information for Docker
