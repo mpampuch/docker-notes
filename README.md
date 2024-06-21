@@ -1369,6 +1369,12 @@ Since the Dockerfile has been modified, the `react-app` image needs to be re-bui
 
 Volumes can also be shared across multiple containers.
 
+To view all the Docker volumes present in your system, you can run:
+
+```bash
+docker volume ls
+```
+
 ### Copying Files between the Host and Containers
 
 Lets say you want to copy the file `log.txt` that is in your container but not in your host filesystem. You can do this by running the `docker cp` command. You need to specify a source and destination. Destinations need to be full _**absolute paths**_ to a file or directory.
