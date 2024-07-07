@@ -2540,7 +2540,7 @@ services:
       dockerfile: Dockerfile.prod
     ports:
       - 80:80
-	  restart: unless-stopped
+    restart: unless-stopped
   api:
     build: ./backend
     ports:
