@@ -2681,12 +2681,13 @@ In the code used up until this point to build and deploy the `vidly` app, there 
 
 1. Once your application is deployed, see if you can access it in your browser. First you need to find the IP of your server. You can go to Digital Oceans control panel, or you can run `Docker machine ls`. Under the `URL` column you should see something like `tcp://104.131.24.150:2376`. You can copy the IP address of the web server (`104.131.24.150`) and paste it in your browser.
 
-- At this point you should see a _This site can't be reached_ error which suggests that your front end application is not up. To test if your backend applicaiton is up, go to the pport your backend application is mapped to, in this case that would mean typing `104.131.24.150:3001/api` into your browser. You should see that your API is running. You can also then go to `104.131.24.150:3001/api/movies` and see if you can fetch some data from the database. This should all be working perfectly fine. This means that the only problem is in the frontend app.
+    - At this point you should see a _This site can't be reached_ error which suggests that your front end application is not up. To test if your backend applicaiton is up, go to the pport your backend application is mapped to, in this case that would mean typing `104.131.24.150:3001/api` into your browser. You should see that your API is running. You can also then go to `104.131.24.150:3001/api/movies` and see if you can fetch some data from the database. This should all be working perfectly fine. This means that the only problem is in the frontend app.
 
 2. Once you think you figured out which app is giving you the problem, you can confirm this by viewing the status of all your running containers using `docker ps`. In this example, in the `STATUS` column, you can see that the `vidly_web` container is constantly restarting. This is because of the `restart` policy that was applied. This suggests that something is wrong in this container and that it is contstantly crashing and restarting.
+
 3. Check the logs of the container(s) you think is giving you the issue. Get the ID of the container (can find it from running `docker ps`) and run `docker logs <CONTAINER-ID>`
 
-- In this example, you should find the in the logs that there is a `Permission denied` error happening from an `nginx` command. It also gives you a warning that says `the "user" directive makes sense only if the master process runs with the super user priveleges.` This error is happening is because here `nginx` is trying to be run using a non-root user.
+    - In this example, you should find the in the logs that there is a `Permission denied` error happening from an `nginx` command. It also gives you a warning that says `the "user" directive makes sense only if the master process runs with the super user priveleges.` This error is happening is because here `nginx` is trying to be run using a non-root user.
 
 4. Now that you likely found the source of the error, you can try to fix it. Here, in the `Dockerfile.prod` file, the code for setting the `app` user can be removed in order to run `nginx` as the root user.
 
@@ -2710,11 +2711,12 @@ docker-compose -f docker-compose.prod.yml up -d --build
 Now `vidley_web` container is running and you can access the homepage of the application by visiting the IP address of the server, but there is now another bug where the data is not being fetched. To troubleshoot this, you can try the following steps:
 
 1. Open up Chrome Dev Tools and open the Network tab. Here you can see the requests sent to your API
+
 2. Select XHR to look at the API requests. Refresh by `Command + R` on Mac to see the Network requests.
 
 ![XHR Section of the Network tab in the Chrome Dev Tools](docker-chrome-dev-tools-debugging.png)
 
-- You can see that the URL of the request is going to `http://localhost:3001/api/movies`. This is the URL only for development. The frontend application running on the web should not send a request to a URL on localhost that doesn't make any sense.
+  - You can see that the URL of the request is going to `http://localhost:3001/api/movies`. This is the URL only for development. The frontend application running on the web should not send a request to a URL on localhost that doesn't make any sense.
 
 2. Check your codebase to see if you can figure out why this URL is being used. In this project, in the `./frontend/src/services/api.js` file, you can find the following line of code:
 
@@ -2722,7 +2724,7 @@ Now `vidley_web` container is running and you can access the homepage of the app
 const baseURL = process.env.REACT_APP_API_URL || "http://localhost:3001/api/";
 ```
 
-- This is saying to use the value of the `REACT_APP_API_URL` environment variable as the base URL to send requests to otherwise use the localhost. This means that you've likely found the problem and you need to set the `REACT_APP_API_URL` environment variable in the production Dockerfile.
+  - This is saying to use the value of the `REACT_APP_API_URL` environment variable as the base URL to send requests to otherwise use the localhost. This means that you've likely found the problem and you need to set the `REACT_APP_API_URL` environment variable in the production Dockerfile.
 
 3. Make the fix. So in this example, add the `REACT_APP_API_URL` environment variable to the **build step** of `/frontend/Dockerfile.prod` and set it to the URL of the Virtual Private Server:
 
@@ -2737,7 +2739,7 @@ ENV REACT_APP_API_URL=http://104.131.24.150:3001/api
 RUN npm run build
 ```
 
-- This was added to the build stage because in React, environemnt variables are processed during the build stage. The `build` tool that comes with React reads all these environment variables, and hard codes them in the final code.
+  - This was added to the build stage because in React, environemnt variables are processed during the build stage. The `build` tool that comes with React reads all these environment variables, and hard codes them in the final code.
 
 4. After saving the changes, re-deploy the app.
 
