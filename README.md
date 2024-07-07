@@ -2766,7 +2766,7 @@ services:
     image: vidley_web:1
     ports:
       - 80:80
-	restart: unless-stopped
+    restart: unless-stopped
   api:
     build: ./backend
     image: vidley_api:1
