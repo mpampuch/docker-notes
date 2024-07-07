@@ -83,10 +83,11 @@ docker image ls
 
 > [!NOTE]
 > Sometimes you may encounter weird issues when building a container and these issues may be related to Docker's caching features. To try and troubleshoot this and force a full re-build, you can use:
+>
 > ```bash
 > docker build -t <name> --no-cache .
 > ```
-> 
+>
 > Another useful option is `--pull`, which means that Docker will try to pull a newer version of the image.
 
 ## Running a Docker Container
@@ -399,7 +400,6 @@ EXPOSE 3000
 
 > [!WARNING]
 > The `EXPOSE` does not automatically publish the port on the host. It is just a form of documentation to tell us this container will eventually listen on port 3000. So later when you properly run this application inside a Docker container, you know that you should map a port on the host to port 3000 on the container. To expose a host port and listen to traffic on the container see the [Publishing Ports](#Publishing-Ports) section.
-
 
 ### `USER`
 
@@ -1420,7 +1420,7 @@ docker run -d -p 5001:3000 -v $(pwd):/app -v app-data:/app/data react-app
 
 Docker Compose is a tool provided by Docker that allows you to define and manage multi-container Docker applications. It uses YAML files to configure the application's services, networks, and volumes, making it easier to orchestrate and run multiple Docker containers that work together.
 
-Docker compose needs to be installed but it is automatically shipped with Docker Desktop for Mac and Windows. To check if it is installed on your machine you can run 
+Docker compose needs to be installed but it is automatically shipped with Docker Desktop for Mac and Windows. To check if it is installed on your machine you can run
 
 ```bash
 docker-compose --version
@@ -1460,16 +1460,15 @@ YAML
 name: Docker
 price: 5
 is_published: true
-tags: 
-  - software 
+tags:
+  - software
   - devops
-author: 
+author:
   first_name: Mark
   last_name: Pampuch
 ```
 
-> [!NOTE]
-> `---` at the top of the `.yml`/`.yaml` document indicates the beginning of a YAML file.
+> [!NOTE] > `---` at the top of the `.yml`/`.yaml` document indicates the beginning of a YAML file.
 
 The overall conclusion is that YAML files are slower to parse than JSON. This is because since everything is represented as a string, the parser doesn't know what should stay a string and what should be evaluated as a value (e.g. numbers, booleans, etc.). However they are more human-readible. So quite often, we use YAML files for configuration files and JSON for exchanging data between computers.
 
@@ -1517,7 +1516,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 
-EXPOSE 3000 
+EXPOSE 3000
 
 CMD ["npm", "start"]
 ```
@@ -1533,9 +1532,9 @@ USER app
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
-COPY . . 
+COPY . .
 
-EXPOSE 3001 
+EXPOSE 3001
 
 CMD ["npm", "start"]
 ```
@@ -1545,13 +1544,13 @@ To begin writing the `docker-compose.yml` file, the first thing you need to set 
 > [!WARNING]
 > The docs mention that the `version` property is obsolete. The following information regarding this property may be outdated.
 
-What version should you use? The [the Docker Compose Docs](https://docs.docker.com/compose/compose-file/) list various compose file formats and their compatibility with docker engine. Use the one compatible with the latest version of docker engine, in order to use the latest compose file format so we have access to the latest features. In this example that is `version 3.8`. 
+What version should you use? The [the Docker Compose Docs](https://docs.docker.com/compose/compose-file/) list various compose file formats and their compatibility with docker engine. Use the one compatible with the latest version of docker engine, in order to use the latest compose file format so we have access to the latest features. In this example that is `version 3.8`.
 
 ```yaml
 version: "3.8"
 ```
 
-You need to wrap this number with double quotes, otherwise it will be evaluated as a number because Docker Compose expects this value to be a string. 
+You need to wrap this number with double quotes, otherwise it will be evaluated as a number because Docker Compose expects this value to be a string.
 
 In the rest of this file you define various building blocks or services of our application. So we have a property called `services`.
 
@@ -1564,7 +1563,7 @@ services:
   database:
 ```
 
-If your application has other moving parts, you can define them here. 
+If your application has other moving parts, you can define them here.
 
 These names are arbitrary, so you can call them anything. For example, another valid thing to call them would be:
 
@@ -1575,10 +1574,9 @@ services:
   db:
 ```
 
-The idea here is that you're defining various services and telling Docker how to build images for each service and how to run these images. So here you're going to have properties, and the value of these properties will eventually be used when running our containers. This way, you don't have to manually run your containers using `docker run`, and here you use parameters like `-p` for port mapping or `-v` for volume mapping. Docker Compose will take care of starting your containers under the hood. 
+The idea here is that you're defining various services and telling Docker how to build images for each service and how to run these images. So here you're going to have properties, and the value of these properties will eventually be used when running our containers. This way, you don't have to manually run your containers using `docker run`, and here you use parameters like `-p` for port mapping or `-v` for volume mapping. Docker Compose will take care of starting your containers under the hood.
 
-
-For each service, you need to tell Docker how to build an image for that service. For that you can use the `build` property and tell Docker Compose where it can find a Dockerfile. 
+For each service, you need to tell Docker how to build an image for that service. For that you can use the `build` property and tell Docker Compose where it can find a Dockerfile.
 
 ```yaml
 version: "3.8"
@@ -1589,8 +1587,7 @@ services:
     build: ./backend
 ```
 
-For the database in this example, the image is not going to be built. Instead, it is going to be pulled from Dockerhub. Therefore, instead of the `build` property, use the `image` property instead. 
-
+For the database in this example, the image is not going to be built. Instead, it is going to be pulled from Dockerhub. Therefore, instead of the `build` property, use the `image` property instead.
 
 ```yaml
 version: "3.8"
@@ -1603,9 +1600,9 @@ services:
     image: mongo:4.0-xenial
 ```
 
-So for any of these services, you can either build an image or pull it down. 
+So for any of these services, you can either build an image or pull it down.
 
-You now can map ports to each of these app components using the `port` property. Because you can have multiple port mappings, here you need to use the array or less syntax. 
+You now can map ports to each of these app components using the `port` property. Because you can have multiple port mappings, here you need to use the array or less syntax.
 
 ```yaml
 version: "3.8"
@@ -1627,34 +1624,34 @@ services:
 > [!NOTE]
 > For the database, MongoDB by default listens on port `27017`. You want to map the same port in order for you to be able to access MongoDB using a MongoDB client like MongoDB Compass. Even if you don't use MongoDB, **you have the same concept with other database engines. All these database engines listen on the default port, you want to map that port so you can connect to your database engine using your favorite database client.**
 
-The next step for this example is to set up an environmental variable. The API project needs an environment variable that tells where the database is. You can do this with the `environment` property. This property can use the list syntax because you can have multiple environment variables. 
+The next step for this example is to set up an environmental variable. The API project needs an environment variable that tells where the database is. You can do this with the `environment` property. This property can use the list syntax because you can have multiple environment variables.
 
 ```yaml
 api:
-    build: ./backend
-    ports:
-      - 3001:3001
-    environment:
-      - DB_URL=mongodb://db/vidly
+  build: ./backend
+  ports:
+    - 3001:3001
+  environment:
+    - DB_URL=mongodb://db/vidly
 ```
 
 > [!NOTE]
-> What does this environment variable mean? This is a MongoDB connection string but structured for this app run with Docker Compose. 
-> 
+> What does this environment variable mean? This is a MongoDB connection string but structured for this app run with Docker Compose.
+>
 > MongoDB connection strings always start with `mongodb://` and then the name of a host. When you start an application with Docker Compose, under the hood, a network is created. On this network you're going to have three hosts. The name of these hosts are equal to the names you have defined here. So in this case, the names of the hosts are `web`, `api`, and `db`. In order to connect to the MongoDB server, you type `mongodb://db`. On this server you can have multiple databases, so you're going to specify the database name (in this case `vidly`) in the connection string as well. Therefore, the final MongoDB connection string will be `mongodb://db/vidly`.
 
-Instead of using the list syntax, you can also use the object or property value syntax. 
+Instead of using the list syntax, you can also use the object or property value syntax.
 
 ```yaml
 api:
-    build: ./backend
-    ports:
-      - 3001:3001
-    environment:
-      DB_URL: mongodb://db/vidly
+  build: ./backend
+  ports:
+    - 3001:3001
+  environment:
+    DB_URL: mongodb://db/vidly
 ```
 
-This syntax is preferable because it's more readible. You get the syntax highlighting and it's just cleaner. 
+This syntax is preferable because it's more readible. You get the syntax highlighting and it's just cleaner.
 
 The Docker Compose file is almost complete. The last thing you want to add here is a volume. This is because you don't want MongoDB to write data to the temporary file system of the container. So here you set volumes with the `volumes` property. Again you can have one or more volume mappings so you use the list or array syntax. You can call this volume anything anything, but in this example, `vidly` is the name of the volume you're going to map to a directory inside the container.
 
@@ -1680,11 +1677,11 @@ services:
 ```
 
 > [!NOTE]
-> Where does `/data/db` come from? If you look at the documentation of MongoDB on Dockerhub or just a typical MongoDB documentation, you know that by default MongoDB stores this data in `/data/db`. 
+> Where does `/data/db` come from? If you look at the documentation of MongoDB on Dockerhub or just a typical MongoDB documentation, you know that by default MongoDB stores this data in `/data/db`.
 
-So you want to map this volume to this directory, so whatever that is written inside this directory is actually outside of this container. It's somewhere else in the volume. 
+So you want to map this volume to this directory, so whatever that is written inside this directory is actually outside of this container. It's somewhere else in the volume.
 
-Now because you have used this volume here, you have to define it in the compose file. Here you're going to define another property called `volumes`, and here you're going to add another property called `vidly`, with no value. 
+Now because you have used this volume here, you have to define it in the compose file. Here you're going to define another property called `volumes`, and here you're going to add another property called `vidly`, with no value.
 
 ```yaml
 ---
@@ -1712,16 +1709,16 @@ volumes:
 
 > [!NOTE]
 > Make sure you remove all the indentation before defining the `volumes` property to ensure it doesn't get nested inside the `services` or `db` keys.
-> 
+>
 > Also assigning no value after `vidly:` is valid YAML syntax. It looks a little bit weird but this is the syntax you have to follow for Docker Compose to work.
 
 The `docker-compose` file is now complete.
 
 The [Docker Compose Docs](https://docs.docker.com/compose/compose-file/) has a full list of the properties you can use to create your `docker-compose` file. A lot of these are for really special cases. So the ones that you will be needing to use most often are just `build`, `image`, `ports`, `volumes`, and `environment`.
 
-#### Building Images from a Docker Compose file 
+#### Building Images from a Docker Compose file
 
-Docker Compose is built on top of Docker engine. So everything you have done with Docker engine, like building images, listing them, starting containers, and so on, all of these operations are also available using Docker Compose. You can type subcommands like `docker-compose rm` for removing stopped containers, `docker-compose run` for running containers, etc.The difference is that these commands will apply to the application as a whole. So most of these commands will impact multiple services or multiple containers in the application. 
+Docker Compose is built on top of Docker engine. So everything you have done with Docker engine, like building images, listing them, starting containers, and so on, all of these operations are also available using Docker Compose. You can type subcommands like `docker-compose rm` for removing stopped containers, `docker-compose run` for running containers, etc.The difference is that these commands will apply to the application as a whole. So most of these commands will impact multiple services or multiple containers in the application.
 
 Therefore that means to build an image, you can do:
 
@@ -1743,7 +1740,7 @@ To run your built app you can use:
 docker-compose up
 ```
 
-You can also build your app and run it at the same time by using 
+You can also build your app and run it at the same time by using
 
 ```bash
 docker-compose up --build
@@ -1786,7 +1783,7 @@ If you want to stop an application from running and free up resources, you can u
 docker-compose down
 ```
 
-This will stop and remove all the running containers for this app. However, all the images for this app are still there. So the next time you want to start the application the application will start pretty quickly. 
+This will stop and remove all the running containers for this app. However, all the images for this app are still there. So the next time you want to start the application the application will start pretty quickly.
 
 ### Docker Networking
 
@@ -1818,7 +1815,7 @@ a500d72d39af   none            null      local
 51bf0f61617d   vidly_default   bridge    local
 ```
 
-Every Docker installation has three networks. `bridge`, `host`, and `none`. You don't have to worry about what these are for they are not that important. What matters is that you can see that the network for the app, `vidly_default`, was created. On Linux, the driver for this network is `bridge` and on Windows it is `NAT`.  
+Every Docker installation has three networks. `bridge`, `host`, and `none`. You don't have to worry about what these are for they are not that important. What matters is that you can see that the network for the app, `vidly_default`, was created. On Linux, the driver for this network is `bridge` and on Windows it is `NAT`.
 
 The network in this example contains three hosts/containers. These being `web`, `api`, and `db`. To prove that these containers can talk to each other using their name you can do this:
 
@@ -1849,7 +1846,7 @@ ping api
 # 64 bytes from 172.19.0.4: seq=1 ttl=64 time=0.191 ms
 # 64 bytes from 172.19.0.4: seq=2 ttl=64 time=0.191 ms
 # 64 bytes from 172.19.0.4: seq=3 ttl=64 time=0.181 ms
-# 
+#
 # --- api ping statistics ---
 # 4 packets transmitted, 4 packets received, 0% packet loss
 # round-trip min/avg/max = 0.119/0.170/0.191 ms
@@ -1900,7 +1897,7 @@ lo        Link encap:Local Loopback
           RX bytes:1214 (1.1 KiB)  TX bytes:1214 (1.1 KiB)
 ```
 
-Here you can see that this container has two network adapters: `eth0` and `lo`. You can see that `172.19.0.3` is the IP address of `eth0`. **This is the IP address of this container (aka the `web` container)**. 
+Here you can see that this container has two network adapters: `eth0` and `lo`. You can see that `172.19.0.3` is the IP address of `eth0`. **This is the IP address of this container (aka the `web` container)**.
 
 Remember that in the `docker-compose.yml` file, inside the `api` service, there was a MongoDB connection string that was added:
 
@@ -1911,7 +1908,7 @@ api:
     DB_URL: mongodb://db/vidly
 ```
 
-Inside this connection string you have `db`, which is the name of the host (the `db` container). So now you know that this is valid syntax because the `api` container can talk to the `db` container using it's name because they are on the same network and because of how the Docker network works. 
+Inside this connection string you have `db`, which is the name of the host (the `db` container). So now you know that this is valid syntax because the `api` container can talk to the `db` container using it's name because they are on the same network and because of how the Docker network works.
 
 This means though that this host `db`, and consequently the MongoDB connection string `mongodb://db/vidly`, is **only available inside the Docker environment**. This means that if you go to your browser and type `localhost:db` or `localhost/db` you will not get anything. If you want to access this container you need **port mapping**. This is why in the `db` service in the `docker-compose` file, we put:
 
@@ -1980,8 +1977,9 @@ services:
 
 > [!NOTE]
 > Remember that when publishing changes using Docker without Docker Compose, you need to specify the **absolute path** of the local directory. This is why the `$(pwd)` syntax was used.
+>
 > ```bash
-> docker run -v $(pwd):/app 
+> docker run -v $(pwd):/app
 > ```
 >
 > You don't have to do with with `docker-compose` files. These files accept **relative paths** as syntax.
@@ -2077,7 +2075,7 @@ Sometimes, a command inside a `docker-compose` file might be very long and it mi
 echo "Waiting for MongoDB to start..."
 ./wait-for-it.sh db:27017
 
-echo "Waiting for MongoDB to 
+echo "Waiting for MongoDB to
 start..."
 npm run db:up
 
@@ -2182,6 +2180,7 @@ volumes:
 ```
 
 So to summarize what you need to do to build test images:
+
 - Duplicate a service configuration for the service you want to test. You can call something like `SERVICE-tests`
 - Change the `build` property to `image` because you're going to be using an existing image. That image's name is `vidley_web`
 - You don't need `ports` because you don't want to access this service directly like you accessed the web service.
@@ -2198,6 +2197,604 @@ docker-compose up
 > Just be aware that if you make any changes in your local repositories, it will take a little while for your tests to be re-run. This is why running automated tests may not be the right approach for you if it hampers your development time too much.
 
 The good thing about this approach is that you don't need to open up different windows and run tests for your frontend and backend components seperately.
+
+## Deploying Dockerized Apps to the Cloud
+
+### Deployment Options
+
+To deploy your Dockerized applications, you have two options:
+
+1. You can deploy your application to a single host
+
+2. You can deploy your application to a cluster (aka a group of servers).
+
+Deploying to a single host is really easy, but the problem with a single host deployment is that if your server goes offline, your application will not be accessible. And also, if your application goes rapidly and you get hundreds of thousands of users, a single server is not able to handle that load. That's why we use clusters. So with clusters, you get high availability and scalability.
+
+To run clusters, you need special tools called orchestration tools. Docker has its own orchestration tool built into it called _Docker swarm_, however it's not really that popular. Most people these days use another tool called _**Kubernetes**_, which is a Google product. Kubernetes is fairly complex and really requires its own course or book. Therefore in this example described, the focus will be on a single host deployment. Don't assume that you need a cluster right from the get go. You can always start simple, and if needed, you can transition to a cluster.
+
+### Getting a Virtual Private Server
+
+To deploy your application, you need a virtual private server or a VPS. There are a ton of options to get a VPS. you have:
+
+- Digital Ocean
+- Google Cloud Platform
+- Microsoft Azure
+- Amazon Web Services
+- etc.
+
+Out of these, Digital Ocean is the simplest and most beginner friendly one, and as you go down this list, you get more features, but at the cost of complexity. All these platforms require you to provide a credit or a debit card to get a VPS. So to execute all the steps in this example section, you will need a debit or credit card unless you already have access to a VPS.
+
+### Installing Docker Machine
+
+Once you have a server, you need to use a tool called _**Docker Machine**_ to talk to the Docker engine on that server. So this way you can execute Docker commands in your terminal, and your commands will be sent to the Docker engine on your server.
+
+To install it, head over to [github.com/docker/machine/releases](github.com/docker/machine/releases). On this page you can find the latest release. Down below you can find the installation instructions for various platforms.
+
+To verify if Docker Machine is installed, type:
+
+```bash
+docker-machine --version
+```
+
+### Provisioning a Host
+
+In this example, we're going to use Docker Machine to create a virtual private server on Digital Oceam. To do this you need to write the following, long, command:
+
+```bash
+docker-machine create \
+--driver digitalocean \
+--digitocean-access-token <PERSONNAL-ACCESS-TOKEN> \
+--engine-install-url "https://releases.rancher.com/install-docker/19.03.9.sh" \
+vidly
+```
+
+- Docker Machine has drivers for different platforms. If you google _Docker Machine drivers_, you'll find this page. So you have drivers for AWS, Microsoft Azure, Digital Ocean, etc. Now if you have a server in your own network, and not in one of these platforms, you can set the driver to `none`. But here you're going to use `digitalocean`.
+- For the second argument, you need to supply an option specific to Digital Ocean. So if you use AWS or another platform, your options are going to be different. This option is `--digitalocean-access-token`. You then need to go to Digital Ocean and get an access token so Docker Machine can talk remotely with Digital Ocean. On [digitalocean.com](digitalocean.com), on the sidebar, you can click `Account` and then `API` (this user interface might change in the future. So if you cannot find it, just search for API on Digital Ocean). Here you can generate a personal access token. You'll want to give this a name, in this case Vidly which the name of the application we're using in the example. Click `Generate New Token` and wait for the token to be generated. Once it is ready, this token is visible only once. So once you move away from this page and come back, you're not going to be able to see it. So copy this and keep it somewhere safe if you want to reuse it in the future.
+- At the time of creating this example, there is a problem on Digital Ocean whereby you cannot install the latest Docker engine on the server. You have to use an earlier version. The solution is to add this extra option `--engine-install-url` when creating a Docker Machine. So with this, you can specify the engine install URL. So at this address, look, you're installing version 19.2.2. This issue may or may not be fixed at this point in time.
+- On the last line, you're going to give the server a name. you can call it `vidly` or whatever you want.
+
+Now after running this command, Docker machine is going to create a virtual machine by the name `vidly` and on that machine, it's going to install Docker. So then you'll be able to talk to that Docker engine remotely, on your machine.
+
+If you look at the output, you'll notice a line that says:
+
+```
+Provisioning with ubuntu(systemd)...
+```
+
+This means that Docker machine was provisioning this with Ubuntu. This is the default image. If you don't want to use Ubuntu, you can use a different image. So back to this page where you can see the list of drivers. Click on the Digital Ocean driver and look down below. You can see all the available options. You'll notice there is a `--digitalocean-image` option which allows you to specify which image to use.
+
+Now, once Ubuntu was installed, then, Docker machine tried to install Docker. So now you have Docker up and running on this machine, and you can talk to it remotely. Also, if you go to the homepage of your account on Digital Ocean, you can see a new droplet called vitly (a droplet on Digital Ocean means a server). Beside the droplet, you can see the public IP address of the server. So you can copy this, open it in the browser. Currently, there will be nothing there because you haven't deployed your application yet.
+
+So now that you have a server up and running, the next step is to connect with this server.
+
+### Connecting to the Host
+
+Let's see how you can connect to your server.
+
+First check which Docker Machines you have by running:
+
+```bash
+docker-machine ls
+```
+
+This will output something like:
+
+```
+NAME	ACTIVE	DRIVER			STATE		URL							SWARM	DOCKER		ERRORS
+vidly	-		digitalocean	Running		tcp://104.131.24.150:2376			v19.03.9
+```
+
+Currently there is a single machine called `vidly`, that is not active. Here you can see the driver for this machine, which is `digitalocean`. The machine is up and running. and in the URL you can see the IP address of this machine. The `SWARM` column tells us if this machine is part of a swarm or not. A swarm represents a cluster. So you can tell that this machine is a single host and it's not part of a cluster because there is nothing in this column. In the next column, you can see the version of Docker engine running on this machine. And finally you can see that there currently are no errors.
+
+Now, to connect to this machine, you're going to use `ssh`. SSH is short for secure shell, and it's a protocol for connecting with servers. So using ssh or secure shell, you can open a secure shell session with your server. Setting up ssh is a bit of pain. There are a number of steps you have to follow so you can connect to a server using ssh. The beauty of Docker Machine is that it abstracts away all this complexity from us. You can simply type the following command (the last argument is the name of the host machine):
+
+```bash
+docker-machine ssh vidly
+```
+
+Now you're logged into your machine using ssh, and **all of this was set up when you created this Docker machine**. Once you access the machine, you will be logged in as the root user and you can look around. The application is not deployed yet, that's why you don't have the app directory.
+
+Once you've made sure your server is in good shape, the next step is to define the production configuration.
+
+### Defining the Production Configuration
+
+The following `docker-compose.yml` file that we have created is great for development, but it's not ideal for production.
+
+```yaml
+---
+version: "3.8"
+
+services:
+  web:
+    build: ./frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/app
+  web-tests:
+    image: vidly_web
+    volumes:
+      - ./frontend:/app
+    command: npm test
+  api:
+    build: ./backend
+    ports:
+      - 3001:3001
+    environment:
+      DB_URL: mongodb://db/vidly
+    volumes:
+      - ./backend:/app
+    command: ./docker-entrypoint.sh
+  api-tests:
+    image: vidly_api
+    environment:
+      DB_URL: mongodb://db/vidly
+    volumes:
+      - ./backend:/app
+    command: npm test
+  db:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+    volumes:
+      - vidly:/data/db
+
+volumes:
+  vidly:
+```
+
+For example, in the production environment, you don't need this volume mapping...
+
+```yaml
+services:
+  web:
+	...
+    volumes:
+      - ./frontend:/app
+```
+
+...because this was added only to share the source code on the local machine with the container.
+
+Similarly, you don't need these other containers for testing...
+
+```yaml
+services:
+  web-tests:
+	...
+  api-tests:
+	...
+```
+
+...because you don't want to continuously run your tests in the production environment and slow down your server.
+
+Therefore, it is a best practice to create a _separate_ `docker-compose` file for the production environment.
+
+You can duplicate the file and then rename it `docker-compose.prod.yaml`. This can be an arbitrary name, but this is a common convention.
+
+Now, let's modify this file bit by bit.
+
+So, for your web service, you're going to keep the `build` property, but you want to use a different port mapping. You don't want to use port `3000` on the host, because you want to type the host name in the browser and immediately see the application. So, you want to map port `80` (which is the default port for web traffic) of the host to port `3000` of the container. You can also delete the `volumes` mapping. The `web` service should now look like
+
+```yaml
+services:
+  web:
+  	build: ./frontend
+    ports:
+      - 80:3000
+```
+
+The `web-tests` service can be completely deleted.
+
+Now, for the `api` service, you're going to keep the `build` property and you can keep the port mapping as well. Keep the environment variable and commands as they are but you don't need the volume mapping here either so you can delete it. The `api` service should now look like:
+
+```yaml
+services:
+  api:
+  	build: ./backend
+    ports:
+      - 3001:3001
+    environment:
+      DB_URL: mongodb://db/vidly
+    command: ./docker-entrypoint.sh
+```
+
+The `api-tests` service can be completely deleted.
+
+You don't have to make any changes to the `db` service.
+
+However, there is an extra property that you probably will want to apply to each of these services, and that is your `restart` policy. The default value of the `restart` property is `no`, which means if this container crashes, it's not going to be restarted and your application will be unavailable. This means you then you have to connect with your server using ssh, and manually restart the container. Since you don't want to use this, you want to use one of the other possible values. The possible values are:
+
+- `restart: no`: This will never restart the container.
+- `restart: always`: This will always restart the container.
+- `restart: on-failure`: This will only restart the container if the container crashes.
+- `restart: unless-stopped`: This will only restart the container if you _manually_ stop it.
+
+In this example, we will use the `unless-stopped` policy.
+
+Therefore, the final `docker-compose.prod.yml` file for the production environment should look like:
+
+```yaml
+---
+version: "3.8"
+
+services:
+  web:
+    build: ./frontend
+    ports:
+      - 80:3000
+	restart: unless-stopped
+  api:
+    build: ./backend
+    ports:
+      - 3001:3001
+    environment:
+      DB_URL: mongodb://db/vidly
+    volumes:
+      - ./backend:/app
+    command: ./docker-entrypoint.sh
+    restart: unless-stopped
+  db:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+    volumes:
+      - vidly:/data/db
+    restart: unless-stopped
+
+volumes:
+  vidly:
+```
+
+### Reducing the Image Size
+
+These days, a lot of frameworks will have some sort of tool for creating optimized assets for production. In React this is the `build` tool which can be run using the `npm run build` command. After running this program, all the optimized assets will be stored in the `build/` directory.
+
+You can leverage this tool to reduce the size of Docker images.
+
+Remember that the `Dockerfile` found inside the `./frontend` directory looks like this:
+
+```dockerfile
+FROM node:14.16.0-alpine3.13
+
+RUN addgroup app && adduser -S -G app app
+USER app
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
+```
+
+Here you are starting from a `node` image so that you can have access to `npm` and install all your dependencies. However, if you already have your dependencies, then you don't need `npm` and you don't need `node`. All you have to do is copy these files onto a web server. This is where you can create a separate `Dockerfile` for production. The changes you make to this `Dockerfile` will only make sense in a production environment, not a development one.
+
+Once again, you can duplicate the `Dockerfile` and rename it to `Dockerfile.prod` (this again is just a common naming convention). Modify this file so it look like this:
+
+```dockerfile
+# Step 1: Build stage
+FROM node:14.16.0-alpine3.13 AS build-stage
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# Step 2: Production stage
+FROM nginx:1.12-alpine
+RUN addgroup app && adduser -S -G app app
+USER app
+COPY --from=build-stage /app/build /usr/share/nginx/html
+EXPOSE 80
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
+```
+
+Lets break this down step-by-step to see what was done here:
+
+- All the previous whitespace that broke up the logic in the old Dockerfile was removed because the production Dockerfile was structured in a different way (into a build and production section)
+- The `AS` keyword was added to give this stage a label. This allows you to reference this stage later in the Dockerfile. In this example, it was labeled `build-stage`.
+  - In a Dockerfile, you can have multiple stages. This is often useful for separating build and production stages.
+- When building this application, you don't need a user or to export a port, because these are instead used for running the application. So the `RUN <add-user>`, `USER`, and `EXPOSE` instructions were moved to the production stage.
+- The `CMD ["npm", "start"]` instruction was replaced with `RUN npm run build`. This is because you are not starting the application here but instead building the optimized assets in this stage. The `CMD` instruction was replaced with the `RUN` instruction because there can only be a single `CMD` instruction in a Dockerfile which is used to specify the default command for starting a container.
+- Another `FROM` instruction was added to the production stage. Since you don't need `npm` to install the dependencies at this point and therefore don't need `node`, the base image this time was a base image that only contains a web server. In this example, the web server that was being used is `nginx` (a very popular and fast web server) and therefore the base image that is being used is `nginx:1.12-alpine`. This image is far smaller than the `node` image.
+  - Here you can give the statement a label as well using the `AS` keyword (Example: `FROM nginx:1.12-alpine AS production-stage`), however you only need this label if you're going to refer to this stage later on in the code. Because this will not be the case in this example, the label was omitted.
+- After creating the user, a `COPY` instruction was added to copy all the optimized assets from the `/app/build` directory in the build stage to the `/usr/share/nginx/html` directory in the .
+  - Because a label was given to the build stage, this stage could be referenced using the `--from=build-stage` option.
+  - The `/usr/share/nginx/html` is a standard path for serving files using `nginx`. You can find this info in the `nginx` documentation on Dockerhub.
+- Instead of exposing port `3000`, port `80` was exposed on the container which is the default port for web traffic.
+- Finally, a default command was specified. Here, the `ENTRYPOINT` instruction was used because everything this container is started, the command should be run, no exceptions.
+  - This command is `nginx -g 'daemon off;'`. You can find these arguments in the documentation of `nginx`.
+
+Once your `Dockerfile.prod` is ready, you can build this using:
+
+```bash
+docker build -t vidly_web_opt -f Dockerfile.prod .
+```
+
+- `-t vidly_web_opt` tags the Docker image as `vidly_web_opt`
+- `-f Dockerfile.prod` tells Docker to use this Dockerfile for building
+- `.` specifies the build context
+
+Now when you run `docker images`, you can compare the new optimized image to the old one to see how much size was reduced:
+
+```
+REPOSITORY		TAG		IMAGE ID		CREATED			SIZE
+vidley_web		latest	bf6f0b7673ea	18 minutes ago	300MB
+vidley_web_opt	latest	cd7ecd4d75d7	20 minutes ago	16.2MB
+```
+
+You can see that the new image is now `16.2MB` instead of `300MB`. This is a huge optimization. Now when deploying this application, instead of transferring a `300MB` image, you only have to transfer a `16.2MB` image.
+
+The last step to do is to update the `docker-compose.prod.yml` file to let it know that you want to use the `Dockerfile.prod` file in the `frontend` directory to build the `web` service. Your updated `docker-compose.prod.yml` file should look like:
+
+```yaml
+---
+version: "3.8"
+
+services:
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    ports:
+      - 80:80
+	restart: unless-stopped
+  api:
+    build: ./backend
+    ports:
+      - 3001:3001
+    environment:
+      DB_URL: mongodb://db/vidly
+    volumes:
+      - ./backend:/app
+    command: ./docker-entrypoint.sh
+    restart: unless-stopped
+  db:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+    volumes:
+      - vidly:/data/db
+    restart: unless-stopped
+
+volumes:
+  vidly:
+```
+
+- Before we used the short-hand syntax of the `build` property, which is just `build: <context>`. Here we now use the long-hand syntax of the property by giving it the sub-properties `context` and `dockerfile`.
+- Since the production port mapping was changed from port `3000` to port `80` on the container, this change is reflected the `ports` property of the `web` service.
+
+To test that this is all working, you can type:
+
+```bash
+docker-compose -f docker-compose.prod.yml build
+```
+
+- `-f docker-compose.prod.yml` tells Docker Compose to use this file instead of the default for building the application.
+
+Now after building, if you run `docker images` to see the available images one more time, you'll see:
+
+```
+REPOSITORY		TAG		IMAGE ID		CREATED			SIZE
+vidley_web_opt	latest	cd7ecd4d75d7	20 minutes ago	16.2MB
+vidley_web		latest	bf6f0b7673ea	20 minutes ago	16.2MB
+```
+
+You can see that the new `vidley_web` image is now `16.2MB` instead of `300MB`.
+
+With this optimization complete, you are now ready to deploy your application.
+
+### Deploying the Application
+
+In order to deploy your application on your virtual private server, first run...
+
+```bash
+docker-machine ls
+```
+
+...to double check that your server is running. This should output something like:
+
+```
+NAME	ACTIVE	DRIVER			STATE		URL							SWARM	DOCKER		ERRORS
+vidly	-		digitalocean	Running		tcp://104.131.24.150:2376			v19.03.9
+```
+
+After making sure that it's running, you can then run this command to see the environmental variables that you need to set in order to talk to this virtual machine:
+
+```bash
+docker-machine env vidly
+```
+
+This will output something like
+
+```
+export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://104.131.24.150:2376"
+export DOCKER_CERT_PATH="/Users/markpampuch/.docker/machine/machine"
+export DOCKER_MACHINE_NAME="vidly"
+# Run this command to configure your shell:
+# eval $(docker-machine env vidly)
+```
+
+So in order to configure your shell with the correct environment variables, run:
+
+```bash
+eval $(docker-machine env vidly)
+```
+
+Now that these environmental variables are set, any Docker commands that you type into your local terminal will be sent to the Docker engine on your virtual machine. So your local Docker client will be talking to the Docker client on the virtual machine. So to prove that, you can run:
+
+```bash
+docker images
+```
+
+and you should only see...
+
+```
+REPOSITORY		TAG		IMAGE ID	CREATED		SIZE
+
+```
+
+...because there are no images on the virtual machine yet.
+
+So therefore, in order to deploy your application to the virtual machine, all you have to do inside your project directory is run:
+
+```bash
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+> [!WARNING]
+> At this point you may get a permissions error saying `Missing write access to /app`. This is because there is an issue with older versions of Docker where the `WORKDIR` instruction didn't respect the `USER` instruction. In this example, in the `backend` component, the `Dockerfile` currently looks like this:
+>
+> ```dockerfile
+> RUN addgroup app && adduser -S -G app app
+> USER app
+>
+> WORKDIR /app
+> ```
+>
+> So even though you set the user on line 2 of this snippet, `WORKDIR` created this directory using the root user. And the root user is the only user who can write to this directory.
+> Now this issue is fixed in the latest version of Docker, because the latest version of Docker uses a different build tool called the buildkit. The new build tool which is called the buildkit provides colorized output. Here there is no colourized output in when Docker is building the images because this VPS you're using an older Docker engine. This was a temporary problem with DigitalOcean and may be fixed at this point but the `WORKDIR` bug is something to be aware of if you ever have to revert back to a previous version of Docker.
+> To fix this, modify the `Dockerfile` to look like:
+>
+> ```dockerfile
+> RUN addgroup app && adduser -S -G app app
+> RUN mkdir /app && chown app:app /app
+> USER app
+>
+> WORKDIR /app
+> ```
+>
+> Here instead of relying on the `WORKDIR` instruction to create this directory for you, you need to create this directory using the `root` user and change the owner of this directory manually. Here, using the `chown` command was used to change the owner user of the `/app` directory to the `app` user and the owner group of the directory to the `app` group as well.
+
+So now if you needed to make this change, you can re-run the previous command with the `--build` option to make sure your images are re-built:
+
+```bash
+docker-compose -f docker-compose.prod.yml up -d --build
+```
+
+### Troubleshooting Deployment Issues
+
+In the code used up until this point to build and deploy the `vidly` app, there were a issues intentionally inserted that will prevent the app from running properly. Below are some tips and strategies for troubleshooting dockerized apps when they don't work correctly when deployed.
+
+1. Once your application is deployed, see if you can access it in your browser. First you need to find the IP of your server. You can go to Digital Oceans control panel, or you can run `Docker machine ls`. Under the `URL` column you should see something like `tcp://104.131.24.150:2376`. You can copy the IP address of the web server (`104.131.24.150`) and paste it in your browser.
+
+- At this point you should see a _This site can't be reached_ error which suggests that your front end application is not up. To test if your backend applicaiton is up, go to the pport your backend application is mapped to, in this case that would mean typing `104.131.24.150:3001/api` into your browser. You should see that your API is running. You can also then go to `104.131.24.150:3001/api/movies` and see if you can fetch some data from the database. This should all be working perfectly fine. This means that the only problem is in the frontend app.
+
+2. Once you think you figured out which app is giving you the problem, you can confirm this by viewing the status of all your running containers using `docker ps`. In this example, in the `STATUS` column, you can see that the `vidly_web` container is constantly restarting. This is because of the `restart` policy that was applied. This suggests that something is wrong in this container and that it is contstantly crashing and restarting.
+3. Check the logs of the container(s) you think is giving you the issue. Get the ID of the container (can find it from running `docker ps`) and run `docker logs <CONTAINER-ID>`
+
+- In this example, you should find the in the logs that there is a `Permission denied` error happening from an `nginx` command. It also gives you a warning that says `the "user" directive makes sense only if the master process runs with the super user priveleges.` This error is happening is because here `nginx` is trying to be run using a non-root user.
+
+4. Now that you likely found the source of the error, you can try to fix it. Here, in the `Dockerfile.prod` file, the code for setting the `app` user can be removed in order to run `nginx` as the root user.
+
+```dockerfile
+# Step 2: Production stage
+FROM nginx:1.12-alpine
+COPY --from=build-stage /app/build /usr/share/nginx/html
+EXPOSE 80
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
+```
+
+> [!NOTE]
+> This is not the correct way to configure an application because the users of an application should never have root privileges. This is just a workaround to get the app to run and show the troubleshooting. There is a way to configure `nginx` to run using a non-root user but this is not the point of this example the point is to give you tips on troubleshooting deployed dockerized apps.
+
+5. Re-deploy your app to see if the issue was fixed:
+
+```bash
+docker-compose -f docker-compose.prod.yml up -d --build
+```
+
+Now `vidley_web` container is running and you can access the homepage of the application by visiting the IP address of the server, but there is now another bug where the data is not being fetched. To troubleshoot this, you can try the following steps:
+
+1. Open up Chrome Dev Tools and open the Network tab. Here you can see the requests sent to your API
+2. Select XHR to look at the API requests. Refresh by `Command + R` on Mac to see the Network requests.
+
+![XHR Section of the Network tab in the Chrome Dev Tools](docker-chrome-dev-tools-debugging.png)
+
+- You can see that the URL of the request is going to `http://localhost:3001/api/movies`. This is the URL only for development. The frontend application running on the web should not send a request to a URL on localhost that doesn't make any sense.
+
+2. Check your codebase to see if you can figure out why this URL is being used. In this project, in the `./frontend/src/services/api.js` file, you can find the following line of code:
+
+```javascript
+const baseURL = process.env.REACT_APP_API_URL || "http://localhost:3001/api/";
+```
+
+- This is saying to use the value of the `REACT_APP_API_URL` environment variable as the base URL to send requests to otherwise use the localhost. This means that you've likely found the problem and you need to set the `REACT_APP_API_URL` environment variable in the production Dockerfile.
+
+3. Make the fix. So in this example, add the `REACT_APP_API_URL` environment variable to the **build step** of `/frontend/Dockerfile.prod` and set it to the URL of the Virtual Private Server:
+
+```dockerfile
+# Step 1: Build stage
+FROM node:14.16.0-alpine3.13 AS build-stage
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+ENV REACT_APP_API_URL=http://104.131.24.150:3001/api
+RUN npm run build
+```
+
+- This was added to the build stage because in React, environemnt variables are processed during the build stage. The `build` tool that comes with React reads all these environment variables, and hard codes them in the final code.
+
+4. After saving the changes, re-deploy the app.
+
+```bash
+docker-compose -f docker-compose.prod.yml up -d --build
+```
+
+### Publishing Changes
+
+Remember that you that you should properly tag your images before deploying them to various environments. So, in this example, if you're still talking to your production machine and you run `docker ps` you will get something like:
+
+```
+bf6f0b7673ea   vidly_web          "nginx -g 'daemon of…"   2 weeks ago   Up 2 weeks   ...     ...
+b4cbefb7a7c4   mongo:4.0-xenial   "docker-entrypoint.s…"   2 weeks ago   Up 2 weeks   0.0.0.0:27017->27017/tcp   vidly-db-1
+484b9cf436d1   vidly_api          "docker-entrypoint.s…"   2 weeks ago   Up 2 weeks   0.0.0.0:3001->3001/tcp     vidly-api-1
+```
+
+On this machine you can see the image `vidley_web`, but you don't know what version of your application is included in this image. So if you encounter inconsistencies amongst different environments, let's say your application works in a certain way in the staging environment, but not the same way in production. you don't know what version each environment is running. Therefore **you want to properly tag your images**. To do this, back to your `docker-compose.prod.yml` file, you can add the image property to tag the images in your application. For example:
+
+```yaml
+services:
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    image: vidley_web:1
+    ports:
+      - 80:80
+	restart: unless-stopped
+  api:
+    build: ./backend
+    image: vidley_api:1
+    ports:
+      - 3001:3001
+    environment:
+      DB_URL: mongodb://db/vidly
+    volumes:
+      - ./backend:/app
+    command: ./docker-entrypoint.sh
+    restart: unless-stopped
+  db:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+    volumes:
+      - vidly:/data/db
+    restart: unless-stopped
+
+volumes:
+  vidly:
+```
+
+Now when you re-deploy the app and run `docker ps` you should see something like this:
+
+Now you can see that in your production app you are running `vidly_web:1` indicating version 1 of this image.
+
+However, the problem with this approach is if you decide to deploy a new version, you have to go back to your compose file, and manually update this, and then re-deploy. This is not ideal, that's why you use continuous integration and deployment tools. Using continuous integration and deployment tools, you can automate your deployment process. So you can configure your tool to check out the latest version of your code from your github repository, then it will build your image and tag it according to the latest build number. Or you can have your tool tag your images based on the latest commit. This way you can easily trace what version you are running in each environment. So instead of an arbitrary number here, you will have your git commit id or the build number. In order to set this up, you have to research certain CI/CD tools and integrate them into your own app.
 
 ## Important Linux Information for Docker
 
@@ -2328,7 +2925,7 @@ Below are some useful aliases/functions I came up with that help to work with Do
 These are added to my dotfiles.
 
 ```zsh
-getconids() {awk '{print $1}' | tail -n +2} 
+getconids() {awk '{print $1}' | tail -n +2}
 rmcons() {getconids | xargs docker container rm -f}
 ```
 
@@ -2348,6 +2945,7 @@ docker ps [-a] | [OPTIONAL grep FOR FILTERING] | rmcons
 
 > [!NOTE]
 > This can also be done natively with docker just by doing
+>
 > ```bash
 > docker container rm -f $(docker container ls -aq)
 > ```
