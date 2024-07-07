@@ -2378,7 +2378,7 @@ So, for your web service, you're going to keep the `build` property, but you wan
 ```yaml
 services:
   web:
-  	build: ./frontend
+    build: ./frontend
     ports:
       - 80:3000
 ```
@@ -2390,7 +2390,7 @@ Now, for the `api` service, you're going to keep the `build` property and you ca
 ```yaml
 services:
   api:
-  	build: ./backend
+    build: ./backend
     ports:
       - 3001:3001
     environment:
