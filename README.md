@@ -2422,7 +2422,7 @@ services:
     build: ./frontend
     ports:
       - 80:3000
-	  restart: unless-stopped
+    restart: unless-stopped
   api:
     build: ./backend
     ports:
