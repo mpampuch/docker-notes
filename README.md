@@ -622,7 +622,7 @@ So for example, if you have a Dockerfile that looks like this:
 
 ```dockerfile
 FROM node:14.16.0-alpine3.13
-RUN addgroup add && adduser -S -G app app
+RUN addgroup app && adduser -S -G app app
 USER app
 WORKDIR /app
 COPY . .
@@ -644,7 +644,7 @@ FROM node:14.16.0-alpine3.13
 Then Docker is going to execute the second instruction:
 
 ```dockerfile
-RUN addgroup add && adduser -S -G app app
+RUN addgroup app && adduser -S -G app app
 ```
 
 This instruction will create a new layer because when you add a user or a group, something is written to the filesystem, in effect modifying some files. This layer will only include the modified files.
@@ -706,7 +706,7 @@ The `RUN npm intall` instruction takes a long time and because it installs all t
 
 ```dockerfile
 FROM node:14.16.0-alpine3.13
-RUN addgroup add && adduser -S -G app app
+RUN addgroup app && adduser -S -G app app
 USER app
 WORKDIR /app
 COPY package*.json .
@@ -1351,7 +1351,7 @@ To fix the above problem, you should create your desired target folder in the Do
 
 ```dockerfile
 FROM node:14.16.0-alpine3.13
-RUN addgroup add && adduser -S -G app app
+RUN addgroup app && adduser -S -G app app
 USER app
 WORKDIR /app
 RUN ["mkdir", "data"]
